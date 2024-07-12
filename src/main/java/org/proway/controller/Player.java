@@ -1,6 +1,9 @@
 package org.proway.controller;
 
+import org.proway.model.midia.Episode;
+import org.proway.model.midia.Midia;
 import org.proway.model.midia.Movie;
+import org.proway.model.midia.Series;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,13 +31,12 @@ public class Player<T> {
         this.filledBar = "▓";
         this.play = "▶";
         this.pause = "⏸";
-        this.min = 94;
 
         midia = (T) new Movie("Batman", "A man with fear", new ArrayList<>(Arrays.asList("Bruce", "Megan")), "Fiction", 6.3, "30-10-2005");
     }
 
     public void startPlayer() {
-        if (midia != null){
+        if (midia != null && min > 10){
             int count = 0;
             while (count <= this.min){
                 try {
@@ -54,6 +56,9 @@ public class Player<T> {
     }
 
     public void setMidia(T midia) {
+        if (midia instanceof Movie) this.min = ((Movie) midia).getDurationMinutes();
+        else if (midia instanceof Episode) this.min = ((Episode) midia).getDurationMin();
+
         this.midia = midia;
     }
 

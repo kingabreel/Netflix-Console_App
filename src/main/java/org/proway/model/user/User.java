@@ -15,14 +15,14 @@ public class User {
     private ArrayList<Midia> history;
     private boolean adm;
 
-    public User(String nome, String password, String email, String plan, boolean active, ArrayList<Midia> minhaLista, ArrayList<Midia> history, boolean adm) {
+    public User(String nome, String password, String email, String plan, boolean active, boolean adm) {
         this.nome = nome;
         this.password = password;
         this.email = email;
         this.plan = plan;
         this.active = active;
-        this.minhaLista = minhaLista;
-        this.history = history;
+        this.minhaLista = new ArrayList<>();
+        this.history = new ArrayList<>();
         this.adm = adm;
     }
 
