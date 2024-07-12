@@ -10,7 +10,7 @@ public class Series extends Midia{
     private int totalEpisode;
     private int averageDurationEpisode;
     private ArrayList<Episode> episodes;
-    private Map<int, List<Episode>> seasons;
+    private Map<Integer, List<Episode>> seasons;
 
     public Series(String name, String synopsis, ArrayList<String> casting, String genre, double imdb, String releaseDate) {
         super(name, synopsis, casting, genre, imdb, releaseDate);
@@ -56,11 +56,11 @@ public class Series extends Midia{
         this.episodes = episodes;
     }
 
-    public Map<int, List<Episode>> getSeasons() {
+    public Map<Integer, List<Episode>> getSeasons() {
         return seasons;
     }
 
-    public void setSeasons(Map<int, List<Episode>> seasons) {
+    public void setSeasons(Map<Integer, List<Episode>> seasons) {
         this.seasons = seasons;
     }
 }
