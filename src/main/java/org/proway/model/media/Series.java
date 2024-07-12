@@ -1,10 +1,10 @@
-package org.proway.model.midia;
+package org.proway.model.media;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Series extends Midia{
+public class Series extends Media {
     private String episodeTitle;
     private int totalSeason;
     private int totalEpisode;
