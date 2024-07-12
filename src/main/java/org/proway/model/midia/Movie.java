@@ -1,4 +1,4 @@
-package org.proway.model;
+package org.proway.model.midia;
 
 import java.util.ArrayList;
 
