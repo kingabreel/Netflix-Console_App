@@ -1,16 +1,17 @@
-package org.proway.model.midia;
+package org.proway.model.media;
 
 import java.util.ArrayList;
 
-public abstract class Midia {
+public abstract class Media {
     private String name;
     private String synopsis;
     private ArrayList<String> casting;
     private String genre;
     private double imdb;
     private String releaseDate;
+    private ArrayList<Comment> comments = new ArrayList<>();
 
-    public Midia(String name, String synopsis, ArrayList<String> casting, String genre, double imdb, String releaseDate) {
+    public Media(String name, String synopsis, ArrayList<String> casting, String genre, double imdb, String releaseDate) {
         this.name = name;
         this.synopsis = synopsis;
         this.casting = casting;
@@ -65,5 +66,18 @@ public abstract class Midia {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public boolean addComment(Comment comment) {
+        comments.add(comment);
+        return false;
     }
 }

@@ -1,4 +1,4 @@
-package org.proway.model.midia;
+package org.proway.model.media;
 
 public class Episode {
     private String title;
