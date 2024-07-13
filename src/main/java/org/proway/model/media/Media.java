@@ -1,22 +1,24 @@
-package org.proway.model.midia;
+package org.proway.model.media;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
-public abstract class Midia {
+public abstract class Media {
     private String name;
     private String synopsis;
     private ArrayList<String> casting;
     private String genre;
     private double imdb;
-    private String releaseDate;
+    private LocalDate releaseDate;
 
-    public Midia(String name, String synopsis, ArrayList<String> casting, String genre, double imdb, String releaseDate) {
+    public Media(String name, String synopsis, ArrayList<String> casting, String genre, double imdb, String releaseDate) {
         this.name = name;
         this.synopsis = synopsis;
         this.casting = casting;
         this.genre = genre;
         this.imdb = imdb;
-        this.releaseDate = releaseDate;
+        this.releaseDate = LocalDate.parse(releaseDate);
     }
 
     public String getName() {
@@ -59,11 +61,11 @@ public abstract class Midia {
         this.imdb = imdb;
     }
 
-    public String getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 }

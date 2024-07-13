@@ -1,32 +1,32 @@
 package org.proway.controller;
 
-import org.proway.model.midia.Midia;
+import org.proway.model.media.Media;
 
 import java.util.ArrayList;
 
 public class MidiaController {
-    private ArrayList<Midia> midiaList = new ArrayList<Midia>();
+    private ArrayList<Media> mediaList = new ArrayList<Media>();
 
     // addMidia
-    public void addMidia(Midia midia) {
-        midiaList.add(midia);
+    public void addMidia(Media media) {
+        mediaList.add(media);
     }
 
     // getMidia
-    public Midia getMidia(Integer index){
-        return midiaList.get(index);
+    public Media getMidia(Integer index){
+        return mediaList.get(index);
     }
 
     // updateMidia
-    public void updateMidia(Midia midia, Integer index) {
+    public void updateMidia(Media media, Integer index) {
 
-        midiaList.set(index, midia);
+        mediaList.set(index, media);
     }
 
     // removeMidia
     public void removeMidia(Integer index) {
 
-        midiaList.remove(index);
+        mediaList.remove(index);
     }
 
 

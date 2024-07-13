@@ -1,6 +1,6 @@
 package org.proway.model.user;
 
-import org.proway.model.midia.Midia;
+import org.proway.model.media.Media;
 
 import java.util.ArrayList;
 
@@ -11,11 +11,11 @@ public class User {
     // plan payment
     private String plan;
     private boolean active;
-    private ArrayList<Midia> minhaLista;
-    private ArrayList<Midia> history;
+    private ArrayList<Media> minhaLista;
+    private ArrayList<Media> history;
     private boolean adm;
 
-    public User(String nome, String password, String email, String plan, boolean active, ArrayList<Midia> minhaLista, ArrayList<Midia> history, boolean adm) {
+    public User(String nome, String password, String email, String plan, boolean active, ArrayList<Media> minhaLista, ArrayList<Media> history, boolean adm) {
         this.nome = nome;
         this.password = password;
         this.email = email;
@@ -66,19 +66,19 @@ public class User {
         this.active = active;
     }
 
-    public ArrayList<Midia> getMinhaLista() {
+    public ArrayList<Media> getMinhaLista() {
         return minhaLista;
     }
 
-    public void setMinhaLista(ArrayList<Midia> minhaLista) {
+    public void setMinhaLista(ArrayList<Media> minhaLista) {
         this.minhaLista = minhaLista;
     }
 
-    public ArrayList<Midia> getHistory() {
+    public ArrayList<Media> getHistory() {
         return history;
     }
 
-    public void setHistory(ArrayList<Midia> history) {
+    public void setHistory(ArrayList<Media> history) {
         this.history = history;
     }
 
