@@ -1,5 +1,7 @@
 package org.proway.view;
 
+import org.proway.controller.Player;
+import org.proway.model.media.Media;
 import org.proway.model.media.Movie;
 import org.proway.model.user.User;
 
@@ -10,14 +12,14 @@ public class DashboardView {
     private final User user;
     private final Scanner scanner;
 
-    public DashboardView(Scanner scanner, User user){
+    public DashboardView(Scanner scanner, User user) {
         this.scanner = scanner;
         this.user = user;
     }
 
     public void dashboardMenu() {
-        int choice = -1;
-        while (choice < 0 || choice > 4) {
+        int choice;
+        do {
             System.out.println("""
                     1- Show catalog
                     2- Search movie or serie
@@ -32,12 +34,15 @@ public class DashboardView {
                 choice = scanner.nextInt();
             }
             switch (choice) {
-                case 1 -> new CatalogView(scanner).watch(new Movie("Batman", "aa", new ArrayList<>(), "", 2, ""));
+                case 1 -> new CatalogView(scanner, user).watch(new Movie("Batman", "aa", new ArrayList<>(), "", 2, ""));
                 case 2 -> System.out.println();
-                case 3 -> System.out.println();
-                case 4 -> System.out.println();
-                case 0 -> System.out.println();
+                case 3 -> {
+                    user.listMedia();
+
+                }
+                case 4 -> user.listHistory();
+                case 0 -> System.out.println("Logging out...");
             }
-        }
+        } while (choice != 0);
     }
 }
