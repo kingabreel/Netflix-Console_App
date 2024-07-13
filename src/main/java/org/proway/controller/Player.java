@@ -1,9 +1,8 @@
 package org.proway.controller;
 
-import org.proway.model.midia.Episode;
-import org.proway.model.midia.Midia;
-import org.proway.model.midia.Movie;
-import org.proway.model.midia.Series;
+
+import org.proway.model.media.Episode;
+import org.proway.model.media.Movie;
 
 import java.util.ArrayList;
 import java.util.Arrays;

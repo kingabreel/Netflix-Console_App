@@ -18,14 +18,14 @@ public class User implements MediaList {
     private ArrayList<Media> history;
     private boolean adm;
 
-    public User(String nome, String password, String email, String plan, boolean active, ArrayList<Media> myList, ArrayList<Media> history, boolean adm) {
+    public User(String nome, String password, String email, String plan, boolean active, boolean adm) {
         this.nome = nome;
         this.password = password;
         this.email = email;
         this.plan = plan;
         this.active = active;
-        this.myList = myList;
-        this.history = history;
+        this.myList = new ArrayList<>();
+        this.history = new ArrayList<>();
         this.adm = adm;
     }
 

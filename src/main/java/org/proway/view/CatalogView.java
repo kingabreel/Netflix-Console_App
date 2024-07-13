@@ -1,8 +1,7 @@
 package org.proway.view;
 
 import org.proway.controller.Player;
-import org.proway.model.midia.Midia;
-import org.proway.model.midia.Movie;
+import org.proway.model.media.Media;
 import org.proway.model.user.User;
 
 import java.util.Scanner;
@@ -15,7 +14,7 @@ public class CatalogView {
         this.player = new Player<>();
     }
 
-    public void watch(Midia midia){
+    public void watch(Media midia){
         System.out.println("Movie configuration: ");
         configureMovie();
         this.player.setMidia(midia);
@@ -93,7 +92,7 @@ public class CatalogView {
         }
     }
 
-    public void userInfoForMovie(User user, Midia midia){
+    public void userInfoForMovie(User user, Media midia){
         int choice = 0;
         while (validateLoop(choice, 3) && choice != 4) {
             System.out.println("""

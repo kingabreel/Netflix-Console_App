@@ -1,7 +1,6 @@
 package org.proway.view;
 
-import org.proway.controller.Player;
-import org.proway.model.midia.Movie;
+import org.proway.model.media.Movie;
 import org.proway.model.user.User;
 
 import java.util.ArrayList;
