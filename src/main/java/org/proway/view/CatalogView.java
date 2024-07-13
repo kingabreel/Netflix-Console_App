@@ -6,6 +6,8 @@ import org.proway.model.user.User;
 
 import java.util.Scanner;
 
+import static org.proway.util.Utils.validateLoop;
+
 public class CatalogView {
     private final Scanner scanner;
     private final Player player;
@@ -132,10 +134,6 @@ public class CatalogView {
         }
 
         return choice == 1 ? "English" : choice == 2 ? "Portuguese" : "German";
-    }
-
-    private boolean validateLoop(int var, int y){
-        return var < 1 || var > y;
     }
 
 }

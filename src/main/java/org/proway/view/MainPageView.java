@@ -4,6 +4,8 @@ import org.proway.model.user.User;
 
 import java.util.Scanner;
 
+import static org.proway.util.Utils.validateLoop;
+
 public class MainPageView {
     private Scanner scanner;
     private final String logo;
@@ -27,7 +29,7 @@ public class MainPageView {
 
         int userChoice = scanner.nextInt();
 
-        while(userChoice != 1 && userChoice != 2){
+        while(validateLoop(userChoice, 0, 2)){
             userChoice = scanner.nextInt();
         }
         scanner.nextLine();
