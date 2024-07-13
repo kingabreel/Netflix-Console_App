@@ -1,7 +1,9 @@
 package org.proway.view;
 
+import org.proway.model.media.Media;
 import org.proway.model.user.User;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainPageView {
@@ -47,7 +49,11 @@ public class MainPageView {
 
         System.out.println();
         // chama funcao para fazer login
-        new DashboardView(scanner, new User("username", "password", "email", "comum", true, false)).dashboardMenu();
+
+        ArrayList<Media> emptyMyList = new ArrayList<>();
+        ArrayList<Media> historyList = new ArrayList<>();
+
+        new DashboardView(scanner, new User("username", "password", "email", "comum", true, emptyMyList, historyList, false)).dashboardMenu();
 
     }
 

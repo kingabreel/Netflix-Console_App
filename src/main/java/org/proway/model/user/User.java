@@ -1,13 +1,14 @@
 package org.proway.model.user;
 
 import org.proway.model.media.Comment;
+import org.proway.model.media.HistoryList;
 import org.proway.model.media.Media;
 import org.proway.model.media.MediaList;
 import org.proway.util.annotations.Doc;
 
 import java.util.ArrayList;
 
-public class User implements MediaList {
+public class User implements MediaList, HistoryList {
     private String nome;
     private String password;
     private String email;
@@ -94,6 +95,11 @@ public class User implements MediaList {
         this.adm = adm;
     }
 
+    @Override
+    public String toString() {
+        return "nome='" + nome + '\'';
+    }
+
     @Doc(author = "Caique Bezerra", date = "12/07/2024", version = "1.0", description = "Add a media to the user list")
     @Override
     public boolean addMedia(Media media) {
@@ -113,6 +119,12 @@ public class User implements MediaList {
     @Doc(author = "Caique Bezerra", date = "12/07/2024", version = "1.0", description = "List all media from the user list")
     @Override
     public ArrayList<Media> listMedia() {
+        if(myList.isEmpty()){
+            System.out.println("Empty list\n");
+        } else {
+            myList.forEach(System.out::println);
+        }
+
         return myList;
     }
 
@@ -130,5 +142,32 @@ public class User implements MediaList {
             return media.getComments();
         }
         return new ArrayList<>();
+    }
+
+    @Doc(author = "Caique Bezerra", date = "13/07/2024", version = "1.0", description = "Add a media to the user history")
+    @Override
+    public boolean addMediaToHistory(Media media) {
+        if (!history.contains(media)) {
+            history.add(media);
+            return true;
+        }
+        return false;
+    }
+
+    @Doc(author = "Caique Bezerra", date = "13/07/2024", version = "1.0", description = "Remove a media from the user history")
+    @Override
+    public boolean removeMediaFromHistory(Media media) {
+        return history.remove(media);
+    }
+
+    @Doc(author = "Caique Bezerra", date = "13/07/2024", version = "1.0", description = "List all media from the user history")
+    @Override
+    public ArrayList<Media> listHistory() {
+        if(history.isEmpty()){
+            System.out.println("Empty history\n");
+        } else {
+            history.forEach(System.out::println);
+        }
+        return history;
     }
 }

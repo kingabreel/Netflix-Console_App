@@ -1,28 +1,33 @@
 package org.proway.view;
 
 import org.proway.controller.Player;
-import org.proway.model.midia.Midia;
-import org.proway.model.midia.Movie;
+import org.proway.model.media.Comment;
+import org.proway.model.media.Media;
+import org.proway.model.media.Movie;
 import org.proway.model.user.User;
 
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class CatalogView {
     private final Scanner scanner;
     private final Player player;
-    public CatalogView(Scanner scanner){
+    private User currentUser;
+
+    public CatalogView(Scanner scanner, User currentUser) {
         this.scanner = scanner;
         this.player = new Player<>();
+        this.currentUser = currentUser;
     }
 
-    public void watch(Midia midia){
+    public void watch(Media media) {
         System.out.println("Movie configuration: ");
-        configureMovie();
-        this.player.setMidia(midia);
+        configureMovie(media);
+        this.player.setMidia(media);
         this.player.startPlayer();
     }
 
-    public void configureMovie(){
+    public void configureMovie(Media media) {
         boolean configurating = true;
 
         while (configurating) {
@@ -32,11 +37,12 @@ public class CatalogView {
                     3- Video speed
                     4- Video quality
                     5- Watch
+                    6- Add to my list
                     """);
 
             int userChoice = scanner.nextInt();
 
-            while (validateLoop(userChoice, 5)) {
+            while (validateLoop(userChoice, 6)) {
                 System.out.println("Invalid option, try again: ");
                 userChoice = scanner.nextInt();
             }
@@ -86,14 +92,19 @@ public class CatalogView {
                 case 5 -> {
                     configurating = false;
 
+                    currentUser.addMediaToHistory(media);
+
                     player.startPlayer();
+
+                    userInfoForMovie(currentUser, media);
                 }
+                case 6 -> currentUser.addMedia(media);
 
             }
         }
     }
 
-    public void userInfoForMovie(User user, Midia midia){
+    public void userInfoForMovie(User user, Media midia) {
         int choice = 0;
         while (validateLoop(choice, 3) && choice != 4) {
             System.out.println("""
@@ -111,23 +122,37 @@ public class CatalogView {
             }
 
             switch (choice) {
-                case 1 -> System.out.println("Curtiu");
-                case 2 -> System.out.println("descurtiu");
-                case 3 -> System.out.println("commentou");
-                case 4 -> System.out.println("saiu");
+                case 1 -> System.out.println("Liked");
+                case 2 -> System.out.println("Unliked");
+                case 3 -> {
+                    System.out.println("Type your comment:");
+                    scanner.nextLine();
+                    String commentText = scanner.nextLine();
+                    LocalDateTime now = LocalDateTime.now();
+                    Comment comment = new Comment(user, commentText, now, midia);
+//                    if (user.addCommentToMedia(midia, comment)) {
+//                        System.out.println("Comment added successfully.");
+//                    } else {
+//                        System.out.println("Failed to add comment..");
+//                    }
+                    user.addCommentToMedia(midia, comment);
+                }
+                case 4 -> {
+                    return;
+                }
             }
         }
     }
 
-    private String languageConfig(){
+    private String languageConfig() {
         System.out.println("""
-                        1- English
-                        2- Portuguese
-                        3- German
-                        """);
+                1- English
+                2- Portuguese
+                3- German
+                """);
         int choice = scanner.nextInt();
 
-        while (validateLoop(choice, 3)){
+        while (validateLoop(choice, 3)) {
             System.out.println("Invalid option");
             choice = scanner.nextInt();
         }
@@ -135,7 +160,7 @@ public class CatalogView {
         return choice == 1 ? "English" : choice == 2 ? "Portuguese" : "German";
     }
 
-    private boolean validateLoop(int var, int y){
+    private boolean validateLoop(int var, int y) {
         return var < 1 || var > y;
     }
 

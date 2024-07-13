@@ -80,4 +80,17 @@ public abstract class Media {
         comments.add(comment);
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "Media{" +
+                "name='" + name + '\'' +
+                ", synopsis='" + synopsis + '\'' +
+                ", casting=" + casting +
+                ", genre='" + genre + '\'' +
+                ", imdb=" + imdb +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", comments=" + comments +
+                '}' + "\n";
+    }
 }
