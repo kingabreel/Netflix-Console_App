@@ -13,18 +13,18 @@ public abstract class FilterMedia {
     private String releaseDate;
     */
     // All search parameters are not exact string match, so it can be a slice of the original media
-    private ArrayList<String> mediaNamesToSarch;
-    private String synopsisSearchTerm;
-    private ArrayList<String> actorsToSearch;
-    private ArrayList<String> genresToSearch;
-    private double imdbScoreIntervalStart;
-    private double imdbScoreIntervalEnd;
-    private LocalDate releaseDateIntervalStart;
-    private LocalDate releaseDateIntervalEnd;
+    protected ArrayList<String> mediaNamesToSearch;
+    protected String synopsisSearchTerm;
+    protected ArrayList<String> actorsToSearch;
+    protected ArrayList<String> genresToSearch;
+    protected double imdbScoreIntervalStart;
+    protected double imdbScoreIntervalEnd;
+    protected LocalDate releaseDateIntervalStart;
+    protected LocalDate releaseDateIntervalEnd;
 
-    public FilterMedia(ArrayList<String> mediaNamesToSarch, String synopsisSearchTerm, ArrayList<String> actorsToSearch, ArrayList<String> genresToSearch, double imdbScoreIntervalStart, double imdbScoreIntervalEnd, LocalDate releaseDateIntervalStart, LocalDate releaseDateIntervalEnd) {
+    public FilterMedia(ArrayList<String> mediaNamesToSearch, String synopsisSearchTerm, ArrayList<String> actorsToSearch, ArrayList<String> genresToSearch, double imdbScoreIntervalStart, double imdbScoreIntervalEnd, LocalDate releaseDateIntervalStart, LocalDate releaseDateIntervalEnd) {
         this.emptyAllFilters();
-        this.mediaNamesToSarch = mediaNamesToSarch;
+        this.mediaNamesToSearch = mediaNamesToSearch;
         this.synopsisSearchTerm = synopsisSearchTerm;
         this.actorsToSearch = actorsToSearch;
         this.genresToSearch = genresToSearch;
@@ -40,7 +40,7 @@ public abstract class FilterMedia {
 
     public void emptyAllFilters()
     {
-        mediaNamesToSarch = null;
+        mediaNamesToSearch = null;
         synopsisSearchTerm = null;
         actorsToSearch = null;
         genresToSearch = null;
@@ -50,8 +50,8 @@ public abstract class FilterMedia {
         releaseDateIntervalEnd = null;
     }
 
-    public void setMediaNamesToSarch(ArrayList<String> mediaNamesToSarch) {
-        this.mediaNamesToSarch = this.mediaNamesToSarch;
+    public void setMediaNamesToSearch(ArrayList<String> mediaNamesToSearch) {
+        this.mediaNamesToSearch = mediaNamesToSearch;
     }
 
     public void setSynopsisSearchTerm(String synopsisSearchTerm) {
@@ -84,8 +84,8 @@ public abstract class FilterMedia {
         this.releaseDateIntervalEnd = releaseDateIntervalEnd;
     }
 
-    public ArrayList<String> getMediaNamesToSarch() {
-        return mediaNamesToSarch;
+    public ArrayList<String> getMediaNamesToSearch() {
+        return mediaNamesToSearch;
     }
 
     public String getSynopsisSearchTerm() {

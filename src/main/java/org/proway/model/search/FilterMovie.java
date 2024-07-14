@@ -41,7 +41,15 @@ public class FilterMovie extends FilterMedia {
         return durationMinutesIntervalStart;
     }
 
+    public void setDurationMinutesIntervalStart(Integer durationMinutesIntervalStart) {
+        this.durationMinutesIntervalStart = durationMinutesIntervalStart;
+    }
+
     public Integer getDurationMinutesIntervalEnd() {
         return durationMinutesIntervalEnd;
+    }
+
+    public void setDurationMinutesIntervalEnd(Integer durationMinutesIntervalEnd) {
+        this.durationMinutesIntervalEnd = durationMinutesIntervalEnd;
     }
 }

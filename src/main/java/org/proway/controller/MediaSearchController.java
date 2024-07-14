@@ -29,8 +29,8 @@ public class MediaSearchController {
         ArrayList<M> filteredMediaList = new ArrayList<>();
 
         // MediaNamesToSearch
-        if (mediaFilter.getMediaNamesToSarch() != null) {
-            for (String nameToSearch : mediaFilter.getMediaNamesToSarch()){
+        if (mediaFilter.getMediaNamesToSearch() != null) {
+            for (String nameToSearch : mediaFilter.getMediaNamesToSearch()){
                 if (md.getName().toLowerCase().contains(nameToSearch.toLowerCase())) {
                     if (!filteredMediaList.contains(md)) {filteredMediaList.add(md);}
                 }
@@ -142,13 +142,15 @@ public class MediaSearchController {
 
     // Search for Episode
     public List<Episode> searchForMediaSeriesEpisode(Series series, Integer SeasonNumber, FilterSeriesEpisode episodeFilter) {
+        // Input a null into SeasonNumber if you don't want to filter by episodes by season
         List<Episode> filteredSeriesEpisodeList = new ArrayList<>();
+        boolean dontFilterEpisodesBySeason = (SeasonNumber == null);
 
         for (Series sr : netflixSystem.getSeriesCatalog().stream().toList())
         {
             // Filter Season
             for (Map.Entry<Integer, List<Episode>> SeEntry : sr.getSeasons().entrySet()) {
-                if (SeEntry.getKey().equals(SeasonNumber)) {
+                if (SeEntry.getKey().equals(SeasonNumber) || dontFilterEpisodesBySeason) {
                     filteredSeriesEpisodeList.addAll(SeEntry.getValue());
                     // Filter Episode
                     for (Episode ep : SeEntry.getValue()) {
