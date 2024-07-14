@@ -1,24 +1,26 @@
 package org.proway.model.media;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
 public abstract class Media {
-    private String name;
-    private String synopsis;
-    private ArrayList<String> casting;
-    private String genre;
-    private double imdb;
-    private LocalDate releaseDate;
+    protected String name;
+    protected String synopsis;
+    protected ArrayList<String> casting;
+    protected double imdb;
+    protected LocalDate releaseDate;
+    protected Genre mediaGenre;
 
-    public Media(String name, String synopsis, ArrayList<String> casting, String genre, double imdb, String releaseDate) {
+    public Media(String name, String synopsis, ArrayList<String> casting, double imdb, String releaseDate, Genre mediaGenre) {
         this.name = name;
         this.synopsis = synopsis;
         this.casting = casting;
-        this.genre = genre;
         this.imdb = imdb;
-        this.releaseDate = LocalDate.parse(releaseDate);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.releaseDate = LocalDate.parse(releaseDate, formatter);
+        this.mediaGenre = mediaGenre;
     }
 
     public String getName() {
@@ -45,14 +47,6 @@ public abstract class Media {
         this.casting = casting;
     }
 
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
     public double getImdb() {
         return imdb;
     }
@@ -67,5 +61,13 @@ public abstract class Media {
 
     public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public Genre getMediaGenre() {
+        return mediaGenre;
+    }
+
+    public void setMediaGenre(Genre mediaGenre) {
+        this.mediaGenre = mediaGenre;
     }
 }

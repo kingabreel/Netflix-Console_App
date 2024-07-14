@@ -1,5 +1,7 @@
 package org.proway.model.search;
 
+import org.proway.model.media.Genre;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,7 +13,7 @@ public class FilterMovie extends FilterMedia {
     private Integer durationMinutesIntervalStart;
     private Integer durationMinutesIntervalEnd;
 
-    public FilterMovie(ArrayList<String> midiaNamesToSarch, String synopsisSearchTerm, ArrayList<String> actorsToSearch, ArrayList<String> genreToSearch, double imdbScoreIntervalStart, double imdbScoreIntervalEnd, LocalDate releaseDateIntervalStart, LocalDate releaseDateIntervalEnd, Integer durationMinutesIntervalStart, Integer durationMinutesIntervalEnd) {
+    public FilterMovie(ArrayList<String> midiaNamesToSarch, String synopsisSearchTerm, ArrayList<String> actorsToSearch, ArrayList<Genre> genreToSearch, double imdbScoreIntervalStart, double imdbScoreIntervalEnd, LocalDate releaseDateIntervalStart, LocalDate releaseDateIntervalEnd, Integer durationMinutesIntervalStart, Integer durationMinutesIntervalEnd) {
         super(midiaNamesToSarch, synopsisSearchTerm, actorsToSearch, genreToSearch, imdbScoreIntervalStart, imdbScoreIntervalEnd, releaseDateIntervalStart, releaseDateIntervalEnd);
         this.emptyAllFilters();
         this.durationMinutesIntervalStart = durationMinutesIntervalStart;

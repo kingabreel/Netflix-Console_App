@@ -2,6 +2,7 @@ package org.proway.config;
 
 import org.proway.controller.NetflixSystem;
 import org.proway.model.media.Episode;
+import org.proway.model.media.Genre;
 import org.proway.model.media.Movie;
 import org.proway.model.media.Series;
 
@@ -29,9 +30,10 @@ public class CreateMoviesAndSeries {
                 "Spider-Man",
                 "\"Spider-Man\" centers on student Peter Parker (Tobey Maguire) who, after being bitten by a genetically-altered spider, gains superhuman strength and the spider-like ability to cling to any surface. He vows to use his abilities to fight crime, coming to understand the words of his beloved Uncle Ben: \"With great power comes great responsibility.\"",
                 new ArrayList<String>(Arrays.asList("Tobey Maguire", "Willem Dafoe", "Kirsten Dunst", "James Franco", "Cliff Robertson")),
-                "Action,Fantasy",
                 7.4,
-                "2002-05-03"
+                "2002-05-03",
+                Genre.ACTION,
+                121
         );
 
         netflixSystem.getCatalog().add(filmeDoBatman);
@@ -42,9 +44,10 @@ public class CreateMoviesAndSeries {
                 "The Boys",
                 "Superheroes are often as popular as celebrities, as influential as politicians, and sometimes even as revered as gods. But that's when they're using their powers for good. What happens when the heroes go rogue and start abusing their powers? When it's the powerless against the super powerful, the Boys head out on a heroic quest to expose the truth about the Seven and Vought, the multibillion-dollar conglomerate that manages the superheroes and covers up their dirty secrets. Based on the comic book series of the same name.",
                 new ArrayList<String>(Arrays.asList("Philip Sgriccia", "Frederick E.O. Toye", "Sarah Boyd", "Eric Kripke", "CStefan Schwartz")),
-                "Comedy, Drama, Action, Adventure, Fantasy",
                 8.7,
-                "2019-07-26"
+                "2019-07-26",
+                Genre.COMEDY,
+                60
         );
 
         Map<Integer, List<Episode>> seasons = new HashMap<Integer, List<Episode>>();

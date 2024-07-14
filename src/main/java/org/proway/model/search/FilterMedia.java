@@ -1,5 +1,7 @@
 package org.proway.model.search;
 
+import org.proway.model.media.Genre;
+
 import java.util.ArrayList;
 import java.time.LocalDate;
 
@@ -16,13 +18,14 @@ public abstract class FilterMedia {
     protected ArrayList<String> mediaNamesToSearch;
     protected String synopsisSearchTerm;
     protected ArrayList<String> actorsToSearch;
-    protected ArrayList<String> genresToSearch;
+    protected ArrayList<Genre> genresToSearch;
     protected double imdbScoreIntervalStart;
     protected double imdbScoreIntervalEnd;
     protected LocalDate releaseDateIntervalStart;
     protected LocalDate releaseDateIntervalEnd;
+    protected Genre genreSearchTerm;
 
-    public FilterMedia(ArrayList<String> mediaNamesToSearch, String synopsisSearchTerm, ArrayList<String> actorsToSearch, ArrayList<String> genresToSearch, double imdbScoreIntervalStart, double imdbScoreIntervalEnd, LocalDate releaseDateIntervalStart, LocalDate releaseDateIntervalEnd) {
+    public FilterMedia(ArrayList<String> mediaNamesToSearch, String synopsisSearchTerm, ArrayList<String> actorsToSearch, ArrayList<Genre> genresToSearch, double imdbScoreIntervalStart, double imdbScoreIntervalEnd, LocalDate releaseDateIntervalStart, LocalDate releaseDateIntervalEnd) {
         this.emptyAllFilters();
         this.mediaNamesToSearch = mediaNamesToSearch;
         this.synopsisSearchTerm = synopsisSearchTerm;
@@ -62,7 +65,7 @@ public abstract class FilterMedia {
         this.actorsToSearch = actorsToSearch;
     }
 
-    public void setGenresToSearch(ArrayList<String> genresToSearch) {
+    public void setGenresToSearch(ArrayList<Genre> genresToSearch) {
         this.genresToSearch = genresToSearch;
     }
 
@@ -84,6 +87,10 @@ public abstract class FilterMedia {
         this.releaseDateIntervalEnd = releaseDateIntervalEnd;
     }
 
+    public void setGenreSearchTerm(Genre genreSearchTerm) {
+        this.genreSearchTerm = genreSearchTerm;
+    }
+
     public ArrayList<String> getMediaNamesToSearch() {
         return mediaNamesToSearch;
     }
@@ -96,7 +103,7 @@ public abstract class FilterMedia {
         return actorsToSearch;
     }
 
-    public ArrayList<String> getGenresToSearch() {
+    public ArrayList<Genre> getGenresToSearch() {
         return genresToSearch;
     }
 

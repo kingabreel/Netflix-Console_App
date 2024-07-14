@@ -1,9 +1,6 @@
 package org.proway.controller;
 
-import org.proway.model.media.Episode;
-import org.proway.model.media.Media;
-import org.proway.model.media.Movie;
-import org.proway.model.media.Series;
+import org.proway.model.media.*;
 import org.proway.model.search.FilterMedia;
 import org.proway.model.search.FilterMovie;
 import org.proway.model.search.Series.FilterSeries;
@@ -56,8 +53,8 @@ public class MediaSearchController {
 
         // genresToSearch
         if (mediaFilter.getGenresToSearch() != null) {
-            for (String genre : mediaFilter.getGenresToSearch()){
-                if (md.getGenre().toLowerCase().contains(genre))
+            for (Genre genre : mediaFilter.getGenresToSearch()){
+                if (mediaFilter.getGenresToSearch().contains(genre))
                     if (!filteredMediaList.contains(md)) {filteredMediaList.add(md);}
             }
         }

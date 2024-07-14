@@ -1,5 +1,6 @@
 package org.proway.model.media;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,13 +13,12 @@ public class Series extends Media {
     private int averageDurationEpisode;
     private Map<Integer, List<Episode>> seasons;
 
-    public Series(String name, String synopsis, ArrayList<String> casting, String genre, double imdb, String releaseDate) {
-        super(name, synopsis, casting, genre, imdb, releaseDate);
-
-        this.seasons = new HashMap<Integer, List<Episode>>();
-        totalSeason = 0;
-        totalEpisodes = 0;
-        averageDurationEpisode = 0;
+    public Series(String name, String synopsis, ArrayList<String> casting, double imdb, String releaseDate, Genre mediaGenre, int averageDurationEpisode) {
+        super(name, synopsis, casting, imdb, releaseDate, mediaGenre);
+        this.totalSeason = 0;
+        this.totalEpisodes = 0;
+        this.averageDurationEpisode = averageDurationEpisode;
+        this.seasons = new HashMap<>();
     }
 
     public void addEpisode(Episode episode, Integer season) {

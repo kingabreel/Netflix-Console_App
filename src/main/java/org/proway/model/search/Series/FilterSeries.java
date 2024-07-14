@@ -1,5 +1,6 @@
 package org.proway.model.search.Series;
 
+import org.proway.model.media.Genre;
 import org.proway.model.search.FilterMedia;
 
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ public class FilterSeries extends FilterMedia {
     private Integer averageDurationEpisodeIntervalStart;
     private Integer averageDurationEpisodeIntervalEnd;
 
-    public FilterSeries(ArrayList<String> midiaNamesToSarch, String synopsisSearchTerm, ArrayList<String> actorsToSearch, ArrayList<String> genreToSearch, double imdbScoreIntervalStart, double imdbScoreIntervalEnd, LocalDate releaseDateIntervalStart, LocalDate releaseDateIntervalEnd, Integer numberOfEpisodesIntervalStart, Integer numberOfEpisodesIntervalEnd, Integer numberOfSeasonIntervalStart, Integer numberOfSeasonIntervalEnd, Integer totalSeasonIntervalStart, Integer totalSeasonIntervalEnd, Integer totalEpisodesIntervalStart, Integer totalEpisodesIntervalEnd, Integer averageDurationEpisodeIntervalStart, Integer averageDurationEpisodeIntervalEnd) {
+    public FilterSeries(ArrayList<String> midiaNamesToSarch, String synopsisSearchTerm, ArrayList<String> actorsToSearch, ArrayList<Genre> genreToSearch, double imdbScoreIntervalStart, double imdbScoreIntervalEnd, LocalDate releaseDateIntervalStart, LocalDate releaseDateIntervalEnd, Integer numberOfEpisodesIntervalStart, Integer numberOfEpisodesIntervalEnd, Integer numberOfSeasonIntervalStart, Integer numberOfSeasonIntervalEnd, Integer totalSeasonIntervalStart, Integer totalSeasonIntervalEnd, Integer totalEpisodesIntervalStart, Integer totalEpisodesIntervalEnd, Integer averageDurationEpisodeIntervalStart, Integer averageDurationEpisodeIntervalEnd) {
         super(midiaNamesToSarch, synopsisSearchTerm, actorsToSearch, genreToSearch, imdbScoreIntervalStart, imdbScoreIntervalEnd, releaseDateIntervalStart, releaseDateIntervalEnd);
         this.emptyAllFilters();
         this.numberOfEpisodesIntervalStart = numberOfEpisodesIntervalStart;
