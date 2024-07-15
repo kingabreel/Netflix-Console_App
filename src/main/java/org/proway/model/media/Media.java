@@ -1,6 +1,8 @@
 package org.proway.model.media;
 
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public abstract class Media {
     private String name;
@@ -8,16 +10,17 @@ public abstract class Media {
     private ArrayList<String> casting;
     private String genre;
     private double imdb;
-    private String releaseDate;
-    private ArrayList<Comment> comments = new ArrayList<>();
+    private LocalDate releaseDate;
 
+    private ArrayList<Comment> comments = new ArrayList<>();
     public Media(String name, String synopsis, ArrayList<String> casting, String genre, double imdb, String releaseDate) {
         this.name = name;
         this.synopsis = synopsis;
         this.casting = casting;
         this.genre = genre;
         this.imdb = imdb;
-        this.releaseDate = releaseDate;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.releaseDate = LocalDate.parse(releaseDate, formatter);
     }
 
     public String getName() {
@@ -60,11 +63,11 @@ public abstract class Media {
         this.imdb = imdb;
     }
 
-    public String getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 
