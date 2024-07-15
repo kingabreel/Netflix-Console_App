@@ -1,6 +1,7 @@
 package org.proway.view;
 
 import org.proway.controller.AdminController;
+import org.proway.controller.MediaSearchController;
 import org.proway.model.user.User;
 import org.proway.repository.MongoRepository;
 import org.proway.util.Utils;
@@ -15,7 +16,7 @@ public class DashboardView {
     public DashboardView(Scanner scanner, User user){
         this.scanner = scanner;
         this.user = user;
-        this.catalogView = new CatalogView(scanner);
+        this.catalogView = new CatalogView(scanner, user);
     }
 
     public void dashboardMenu() {
@@ -87,7 +88,9 @@ public class DashboardView {
                     }
                 }
             }
-            case 2 -> System.out.println();
+            case 2 -> {
+                new SearchView(scanner);
+            }
             case 3 -> {
                 System.out.println("Your list: ");
                 user.getMyList().forEach(e -> {

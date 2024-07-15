@@ -59,7 +59,7 @@ public class AdminController {
                 if (continueAdding.startsWith("n")) finishedCasting = true;
             }
 
-            Movie movie = new Movie(name, synopsis, casting, genre, imdb, date);
+            Movie movie = new Movie(name, synopsis, casting, imdb, date, genre);
             movie.setDurationMinutes(min);
 
             mongoRepository.addMovie(movie);

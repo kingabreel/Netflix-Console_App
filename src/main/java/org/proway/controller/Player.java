@@ -1,9 +1,9 @@
 package org.proway.controller;
 
-
 import org.proway.model.media.Episode;
+import org.proway.model.media.Media;
 import org.proway.model.media.Movie;
-
+import org.proway.model.media.Series;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,7 +31,6 @@ public class Player<T> {
         this.play = "▶";
         this.pause = "⏸";
 
-        midia = (T) new Movie("Batman", "A man with fear", new ArrayList<>(Arrays.asList("Bruce", "Megan")), "Fiction", 6.3, "30-10-2005");
     }
 
     public void startPlayer() {

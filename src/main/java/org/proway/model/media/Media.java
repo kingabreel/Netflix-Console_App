@@ -1,6 +1,9 @@
 package org.proway.model.media;
 
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public abstract class Media {
     private String name;
@@ -8,16 +11,19 @@ public abstract class Media {
     private ArrayList<String> casting;
     private String genre;
     private double imdb;
-    private String releaseDate;
-    private ArrayList<Comment> comments = new ArrayList<>();
+    private LocalDate releaseDate;
 
+    private ArrayList<Comment> comments = new ArrayList<>();
     public Media(String name, String synopsis, ArrayList<String> casting, String genre, double imdb, String releaseDate) {
         this.name = name;
         this.synopsis = synopsis;
         this.casting = casting;
         this.genre = genre;
         this.imdb = imdb;
-        this.releaseDate = releaseDate;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try {
+            this.releaseDate = LocalDate.parse(releaseDate, formatter);
+        } catch (NullPointerException DateTimeParseException) {}
     }
 
     public String getName() {
@@ -60,11 +66,11 @@ public abstract class Media {
         this.imdb = imdb;
     }
 
-    public String getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -79,5 +85,18 @@ public abstract class Media {
     public boolean addComment(Comment comment) {
         comments.add(comment);
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Media{" +
+                "name='" + name + '\'' +
+                ", synopsis='" + synopsis + '\'' +
+                ", casting=" + casting +
+                ", genre='" + genre + '\'' +
+                ", imdb=" + imdb +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", comments=" + comments +
+                '}' + "\n";
     }
 }

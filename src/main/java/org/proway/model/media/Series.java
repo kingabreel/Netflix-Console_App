@@ -1,6 +1,7 @@
 package org.proway.model.media;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ public class Series extends Media {
 
     public Series(String name, String synopsis, ArrayList<String> casting, String genre, double imdb, String releaseDate) {
         super(name, synopsis, casting, genre, imdb, releaseDate);
+        this.seasons = new HashMap<>();
     }
 
     public int getTotalSeason() {

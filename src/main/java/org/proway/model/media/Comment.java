@@ -48,4 +48,12 @@ public class Comment {
     public void setMedia(Media media) {
         this.media = media;
     }
+
+    @Override
+    public String toString() {
+        return "user=" + user.getName() +
+                ", comment='" + content + '\'' +
+                ", date=" + date +
+                '}';
+    }
 }

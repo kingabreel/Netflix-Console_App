@@ -1,7 +1,10 @@
 package org.proway.view;
 
+import org.proway.model.media.Media;
 import org.proway.model.user.User;
+import org.proway.repository.MongoRepository;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static org.proway.util.Utils.validateLoop;
@@ -9,11 +12,12 @@ import static org.proway.util.Utils.validateLoop;
 public class MainPageView {
     private Scanner scanner;
     private final String logo;
+    private MongoRepository mongoRepository;
 
     public MainPageView(){
         this.scanner = new Scanner(System.in);
         this.logo = "\uD83C\uDDF3\u200C\uD83C\uDDEA\u200C\uD83C\uDDF9\u200C\uD83C\uDDEB\u200C\uD83C\uDDF1\u200C\uD83C\uDDEE\u200C\uD83C\uDDFD\u200C";
-
+        mongoRepository = new MongoRepository();
         startAccount();
     }
 
@@ -41,6 +45,7 @@ public class MainPageView {
     }
 
     private void login(){
+        System.out.println("====Login====");
         System.out.print("Email: ");
         String email = scanner.nextLine();
 
@@ -48,39 +53,28 @@ public class MainPageView {
         String password = scanner.nextLine();
 
         System.out.println();
-        // chama funcao para fazer login
-        new DashboardView(scanner, new User("username", "password", "email", "comum", true, false)).dashboardMenu();
-
+        User user = mongoRepository.login(email, password);
+        if (user != null) {
+            DashboardView dv = new DashboardView(scanner, user);
+            dv.dashboardMenu();
+        }
+        else System.out.println("Invalid user");
     }
 
     private void createAccount(){
+        System.out.println("====New account====");
         System.out.print("Username: ");
         String username = scanner.nextLine();
-
-      /*  while (!validadeUserName(username)) {
-            System.out.println("Invalid user name.");
-            System.out.print("Username: ");
-            username = scanner.nextLine();
-        }
 
         System.out.print("Email: ");
         String email = scanner.nextLine();
 
-        while (!validadeEmail(email)){
-            System.out.println("Invalid email");
-            email = scanner.nextLine();
-        }
         System.out.print("Password: ");
         String password = scanner.nextLine();
 
-        while (!validadePassword(password)){
-            System.out.println("Invalid password");
-            password = scanner.nextLine();
-        }
-
         User user = new User(username, password, email, "comum", true, false);
-        db.addUser(user);
-        */
+        mongoRepository.addUser(user);
+
         login();
     }
 

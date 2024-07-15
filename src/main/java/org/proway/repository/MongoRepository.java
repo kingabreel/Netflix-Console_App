@@ -8,6 +8,7 @@ import org.proway.config.database.MongoDbConnection;
 import org.proway.model.media.Media;
 import org.proway.model.media.Movie;
 import org.proway.model.media.Series;
+import org.proway.model.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class MongoRepository {
     public void addSerie(Series serie) {
         Document q = new Document("name", serie.getName());
 
-        if (!database.getCollection("Movies").find(q).iterator().hasNext()){
+        if (!database.getCollection("Series").find(q).iterator().hasNext()){
             Document doc = new Document("name", serie.getName())
                     .append("synopsis", serie.getSynopsis())
                     .append("casting", serie.getCasting())
@@ -51,6 +52,23 @@ public class MongoRepository {
         }
     }
 
+    public void addUser(User user){
+        Document q = new Document("name", user.getName());
+
+        if (!database.getCollection("UserAccounts").find(q).iterator().hasNext()){
+            Document doc = new Document("name", user.getName())
+                    .append("email", user.getEmail())
+                    .append("password", user.getPassword())
+                    .append("plan", user.getPlan())
+                    .append("history", user.getHistory())
+                    .append("list", user.getMyList())
+                    .append("admin", user.isAdm())
+                    .append("active", user.isActive());
+
+            database.getCollection("UserAccounts").insertOne(doc);
+        }
+    }
+
     public List<Movie> getMovie(){
         List<Movie> movies = new ArrayList<>();
         MongoCollection<Document> collection = database.getCollection("Movies");
@@ -59,7 +77,7 @@ public class MongoRepository {
         for (Document doc : documents) {
             ArrayList<String> casting = new ArrayList<>(doc.getList("casting", String.class));
 
-            Movie movie = new Movie(doc.getString("name"), doc.getString("sinopsys"), casting, doc.getString("genre"), doc.getDouble("imdb"), doc.getString("releaseDate"));
+            Movie movie = new Movie(doc.getString("name"), doc.getString("sinopsys"), casting, doc.getDouble("imdb"), doc.getString("releaseDate"), doc.getString("genre"));
             movie.setDurationMinutes(doc.getInteger("duration"));
 
             movies.add(movie);
@@ -91,6 +109,28 @@ public class MongoRepository {
         media.addAll(getSeries());
 
         return media;
+    }
+
+    public User login(String email, String password) {
+        Document query = new Document("email", email)
+                .append("password", password);
+
+        MongoCollection<Document> collection = database.getCollection("UserAccounts");
+        Document result = collection.find(query).first();
+
+        if (result != null) {
+            User user = new User();
+            user.setName(result.getString("name"));
+            user.setEmail(result.getString("email"));
+            user.setPassword(result.getString("password"));
+            user.setPlan(result.getString("plan"));
+            user.setAdm(result.getBoolean("admin"));
+            user.setActive(result.getBoolean("active"));
+            return user;
+        } else {
+            return null;
+        }
+
     }
 
     public void removeSerie(String serie){
