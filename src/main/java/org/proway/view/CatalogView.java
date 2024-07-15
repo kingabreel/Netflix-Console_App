@@ -18,7 +18,7 @@ public class CatalogView {
     private ArrayList<Media> media;
     private static MongoRepository mongoRepository;
     private int count = 0;
-    private User currentUser;
+    private final User currentUser;
     private Media currentMedia;
 
     public CatalogView(Scanner scanner, User currentUser) {
@@ -48,15 +48,12 @@ public class CatalogView {
         else count += 10;
 
         showMedia();
-        this.currentUser = currentUser;
     }
 
     public void watch(Media media) {
         System.out.println("Movie configuration: ");
-        configureMovie();
         currentMedia = media;
-        this.player.setMidia(media);
-        this.player.startPlayer();
+        configureMovie();
     }
 
     public void configureMovie(){
@@ -70,11 +67,12 @@ public class CatalogView {
                     4- Video quality
                     5- Watch
                     6- Add to my list
+                    7- Return
                     """);
 
             int userChoice = scanner.nextInt();
 
-            while (validateLoop(userChoice, 6)) {
+            while (validateLoop(userChoice, 7)) {
                 System.out.println("Invalid option, try again: ");
                 userChoice = scanner.nextInt();
             }
@@ -123,14 +121,22 @@ public class CatalogView {
                 }
                 case 5 -> {
                     configurating = false;
-
-                    //currentUser.addMediaToHistory(media);
+                    this.player.setMidia(currentMedia);
 
                     player.startPlayer();
 
+                    currentUser.addMediaToHistory(currentMedia);
+
+                    mongoRepository.addMediaToHistory(currentUser, currentMedia);
+
                     userInfoForMovie(currentUser, currentMedia);
                 }
-                case 6 -> currentUser.addMedia(currentMedia);
+                case 6 -> {
+                    currentUser.addMedia(currentMedia);
+                    mongoRepository.addMediaToMyList(currentUser, currentMedia);
+                    System.out.println("Media added to my list");
+                }
+                case 7 -> configurating = false;
 
             }
         }

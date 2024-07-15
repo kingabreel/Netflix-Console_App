@@ -1,7 +1,6 @@
 package org.proway.view;
 
 import org.proway.controller.AdminController;
-import org.proway.controller.MediaSearchController;
 import org.proway.model.user.User;
 import org.proway.repository.MongoRepository;
 import org.proway.util.Utils;
@@ -25,7 +24,7 @@ public class DashboardView {
             printMenu();
             choice = scanner.nextInt();
 
-            while (user.isAdm() ? Utils.validateLoop(choice, 0, 4) : Utils.validateLoop(choice, 0, 7)) {
+            while (!user.isAdm() ? Utils.validateLoop(choice, 0, 4) : Utils.validateLoop(choice, 0, 7)) {
                 System.out.println("Invalid choice");
                 choice = scanner.nextInt();
             }
@@ -42,26 +41,26 @@ public class DashboardView {
             case 1 -> {
                 catalogView.showMedia();
 
-                System.out.println("Please choose an movie id to watch, type 0 to get more movies or type -1 to exit");
-                int midiaChoice = scanner.nextInt();
+                int midiaChoice = -5;
 
                 while (midiaChoice != -1) {
+                    System.out.println("Please choose an movie id to watch, type 0 to get more movies or type -1 to exit");
+                    midiaChoice = scanner.nextInt();
                     if (midiaChoice > 0 && midiaChoice < catalogView.getMedia().size())
                         catalogView.watch(catalogView.getMedia().get(midiaChoice - 1));
                     else if (midiaChoice == 0) {
                         catalogView.nextMediaList();
-                        midiaChoice = scanner.nextInt();
                     }
                 }
             }
-            case 2 -> System.out.println();
+            case 2 -> new SearchView(scanner);
             case 3 -> {
                 System.out.println("Your list: ");
-                user.getMyList().forEach(e -> System.out.println(STR."Name: \{e.getName()}\nImdb: \{e.getImdb()}Genre: \{e.getGenre()}"));
+                user.getMyList().forEach(e ->System.out.println("====================\n" + "Name: " + e.getName() + "\n" + "Imdb: " + e.getImdb() + "\n" + "Genre: " + e.getGenre() + "\n===================="));
             }
             case 4 -> {
                 System.out.println("Watched history: ");
-                user.getHistory().forEach(e -> System.out.println("Name: \" + e.getName() + \"\\n\" + \"Imdb: \" + e.getImdb() + \"Genre: \" + e.getGenre()"));
+                user.getHistory().forEach(e -> System.out.println("====================\n" + "Name: " + e.getName() + "\n" + "Imdb: " + "\n" + e.getImdb() + "\n" + "Genre: " + "\n" + e.getGenre() + "\n===================="));
             }
             case 5 -> ac.addMedia();
             case 6 -> ac.removeMovie();
@@ -88,18 +87,14 @@ public class DashboardView {
                     }
                 }
             }
-            case 2 -> {
-                new SearchView(scanner);
-            }
+            case 2 -> new SearchView(scanner);
             case 3 -> {
                 System.out.println("Your list: ");
-                user.getMyList().forEach(e -> {
-                    System.out.println("Name: " + e.getName() + "\n" + "Imdb: " + e.getImdb() + "Genre: " + e.getGenre());
-                });
+                user.getMyList().forEach(e -> System.out.println("====================\n" + "Name: " + e.getName() + "\n" + "Imdb: " + e.getImdb() + "\n" + "Genre: " + e.getGenre() + "\n===================="));
             }
             case 4 -> {
                 System.out.println("Watched history: ");
-                user.getHistory().forEach(e -> System.out.println("Name: \" + e.getName() + \"\\n\" + \"Imdb: \" + e.getImdb() + \"Genre: \" + e.getGenre()"));
+                user.getHistory().forEach(e -> System.out.println("====================\n" + "Name: " + e.getName() + "\n" + "Imdb: " + "\n" + e.getImdb() + "\n" + "Genre: " + "\n" + e.getGenre() + "\n===================="));
             }
             case 0 -> System.out.println();
         }
@@ -108,23 +103,27 @@ public class DashboardView {
     private void printMenu(){
         if (user.isAdm()){
             System.out.println("""
+                    ==== Your Options =====
                     1- Show catalog
                     2- Search movie or serie
                     3- My list
                     4- History
-                    ==== Admin Options ======
+                    ==== Admin Options ====
                     5- Insert movie/series to the catalog
                     6- Remove movie
                     7- Remove series
                     0- Logout
+                    =======================
                     """);
         } else {
             System.out.println("""
+                    ==== Your Options ====
                     1- Show catalog
                     2- Search movie or serie
                     3- My list
                     4- History
                     0- Logout
+                    =======================
                     """);
         }
     }

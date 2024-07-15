@@ -18,9 +18,10 @@ public class AdminController {
     }
     public void addMedia(){
         System.out.print("Movie or Series? (m or s)");
+        scanner.nextLine();
         String choice = scanner.nextLine().toLowerCase();
 
-        while (!choice.startsWith("m") || !choice.startsWith("s")){
+        while (!choice.startsWith("m") && !choice.startsWith("s")){
             System.out.println("Invalid");
             choice = scanner.nextLine();
         }
@@ -32,14 +33,18 @@ public class AdminController {
             System.out.print("Imdb: ");
             double imdb = scanner.nextDouble();
 
+            scanner.nextLine();
+
             System.out.print("Synopsis: ");
             String synopsis = scanner.nextLine();
 
-            System.out.print("ReleaseDate: dd-mm-yyyy");
+            System.out.print("ReleaseDate: yyyy-MM-dd ");
             String date = scanner.nextLine();
 
             System.out.print("Duration (min): ");
             int min = scanner.nextInt();
+
+            scanner.nextLine();
 
             System.out.print("Genre: ");
             String genre = scanner.nextLine();
@@ -47,7 +52,7 @@ public class AdminController {
             ArrayList<String> casting = new ArrayList<>();
 
             boolean finishedCasting = false;
-            System.out.println("Casting: ");
+            System.out.println("Casting");
 
             while (!finishedCasting){
                 System.out.print("Name: ");
@@ -62,6 +67,7 @@ public class AdminController {
             Movie movie = new Movie(name, synopsis, casting, imdb, date, genre);
             movie.setDurationMinutes(min);
 
+            System.out.println();
             mongoRepository.addMovie(movie);
         } else {
             System.out.print("Name: ");

@@ -1,11 +1,7 @@
 package org.proway.controller;
 
 import org.proway.model.media.Episode;
-import org.proway.model.media.Media;
 import org.proway.model.media.Movie;
-import org.proway.model.media.Series;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Player<T> {
     private String quality;
@@ -16,7 +12,6 @@ public class Player<T> {
     private T midia;
     private final String notFilledBar;
     private final String filledBar;
-    private final String play;
     private final String pause;
     private int min;
 
@@ -28,7 +23,6 @@ public class Player<T> {
         this.subtitle = "English";
         this.notFilledBar = "░";
         this.filledBar = "▓";
-        this.play = "▶";
         this.pause = "⏸";
 
     }
@@ -41,7 +35,7 @@ public class Player<T> {
                     System.out.println(this.pause + "  " + "↻   ⟳ " + (filledBar.repeat(count)) + (notFilledBar.repeat(this.min - count)) + "  " +
                             (count < 60 ? "00:" + (count < 10 ? "0" + count : count) + ":00" : count < 120 ? "01:" + (count - 60 < 10 ? "0" + (count - 60) : (count - 60)) + ":00" : "02:" + (count - 120 < 10 ? "0" + (count - 120) : count - 120) + ":00")
                             + "   " + this.videoSpeed + "x");
-                    Thread.sleep(500);
+                    Thread.sleep(200);
                     System.out.println("\n".repeat(25));
                 } catch (InterruptedException e) {}
                 count++;

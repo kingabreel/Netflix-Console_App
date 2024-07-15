@@ -4,17 +4,22 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.proway.config.database.MongoDbConnection;
 import org.proway.model.media.Media;
 import org.proway.model.media.Movie;
 import org.proway.model.media.Series;
+import org.proway.model.media.conserter.Converter;
 import org.proway.model.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.addToSet;
+
 public class MongoRepository {
-    private MongoDatabase database;
+    private final MongoDatabase database;
 
     public MongoRepository(){
         database = MongoDbConnection.getInstance().getDatabase();
@@ -126,6 +131,20 @@ public class MongoRepository {
             user.setPlan(result.getString("plan"));
             user.setAdm(result.getBoolean("admin"));
             user.setActive(result.getBoolean("active"));
+
+            ArrayList<Media> myList = new ArrayList<>();
+            for (Document doc : (List<Document>) result.get("list")){
+                myList.add(Converter.docToMedia(doc));
+            }
+
+            ArrayList<Media> history = new ArrayList<>();
+            for (Document doc : (List<Document>) result.get("history")){
+                history.add(Converter.docToMedia(doc));
+            }
+
+            user.setHistory(history);
+            user.setMyList(myList);
+
             return user;
         } else {
             return null;
@@ -153,5 +172,19 @@ public class MongoRepository {
         } else {
             System.out.println("Not found");
         }
+    }
+
+    public void addMediaToMyList(User user, Media media) {
+        MongoCollection<Document> collection = database.getCollection("UserAccounts");
+        Bson filter = eq("email", user.getEmail());
+        Bson update = addToSet("list", Converter.mediaToDoc(media));
+        collection.updateOne(filter, update);
+    }
+
+    public void addMediaToHistory(User user, Media media) {
+        MongoCollection<Document> collection = database.getCollection("UserAccounts");
+        Bson filter = eq("email", user.getEmail());
+        Bson update = addToSet("history", Converter.mediaToDoc(media));
+        collection.updateOne(filter, update);
     }
 }
