@@ -2,6 +2,7 @@ package org.proway.model.search;
 
 import org.proway.model.media.Genre;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
@@ -23,10 +24,9 @@ public abstract class FilterMedia {
     protected double imdbScoreIntervalEnd;
     protected LocalDate releaseDateIntervalStart;
     protected LocalDate releaseDateIntervalEnd;
-    protected Genre genreSearchTerm;
 
     public FilterMedia(ArrayList<String> mediaNamesToSearch, String synopsisSearchTerm, ArrayList<String> actorsToSearch, ArrayList<Genre> genresToSearch, double imdbScoreIntervalStart, double imdbScoreIntervalEnd, LocalDate releaseDateIntervalStart, LocalDate releaseDateIntervalEnd) {
-        this.emptyAllFilters();
+        this.emptyAllFiltersMedia();
         this.mediaNamesToSearch = mediaNamesToSearch;
         this.synopsisSearchTerm = synopsisSearchTerm;
         this.actorsToSearch = actorsToSearch;
@@ -38,17 +38,17 @@ public abstract class FilterMedia {
     }
 
     public FilterMedia() {
-        this.emptyAllFilters();
+        this.emptyAllFiltersMedia();
     }
 
-    public void emptyAllFilters()
+    public void emptyAllFiltersMedia()
     {
         mediaNamesToSearch = null;
         synopsisSearchTerm = null;
         actorsToSearch = null;
         genresToSearch = null;
-        imdbScoreIntervalStart = -1;
-        imdbScoreIntervalEnd = -1;
+        imdbScoreIntervalStart = -1.0;
+        imdbScoreIntervalEnd = -1.0;
         releaseDateIntervalStart = null;
         releaseDateIntervalEnd = null;
     }
@@ -78,17 +78,15 @@ public abstract class FilterMedia {
         this.imdbScoreIntervalEnd = imdbScoreIntervalEnd;
     }
 
-    public void setReleaseDateInterval(LocalDate releaseDateIntervalEnd) {
-        this.releaseDateIntervalEnd = releaseDateIntervalEnd;
+    public void setReleaseDateInterval(String releaseDateIntervalEnd) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.releaseDateIntervalEnd = LocalDate.parse(releaseDateIntervalEnd, formatter);
     }
 
-    public void setReleaseDateInterval(LocalDate releaseDateIntervalStart ,LocalDate releaseDateIntervalEnd) {
-        this.releaseDateIntervalStart = releaseDateIntervalStart;
-        this.releaseDateIntervalEnd = releaseDateIntervalEnd;
-    }
-
-    public void setGenreSearchTerm(Genre genreSearchTerm) {
-        this.genreSearchTerm = genreSearchTerm;
+    public void setReleaseDateInterval(String releaseDateIntervalStart ,String releaseDateIntervalEnd) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.releaseDateIntervalStart = LocalDate.parse(releaseDateIntervalStart, formatter);
+        this.releaseDateIntervalEnd = LocalDate.parse(releaseDateIntervalEnd, formatter);
     }
 
     public ArrayList<String> getMediaNamesToSearch() {
