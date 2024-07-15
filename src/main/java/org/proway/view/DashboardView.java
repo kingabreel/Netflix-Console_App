@@ -1,25 +1,26 @@
 package org.proway.view;
 
 import org.proway.controller.AdminController;
-import org.proway.model.media.Movie;
 import org.proway.model.user.User;
+import org.proway.repository.MongoRepository;
 import org.proway.util.Utils;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DashboardView {
     private final User user;
     private final Scanner scanner;
+    private final CatalogView catalogView;
 
     public DashboardView(Scanner scanner, User user){
         this.scanner = scanner;
         this.user = user;
+        this.catalogView = new CatalogView(scanner);
     }
 
     public void dashboardMenu() {
         int choice = -1;
-        while (choice < 0 || choice > 4) {
+        while (choice != 0) {
             printMenu();
             choice = scanner.nextInt();
 
@@ -34,15 +35,36 @@ public class DashboardView {
     }
 
     private void adminRedirect(int choice) {
-        AdminController ac = new AdminController();
+        AdminController ac = new AdminController(new MongoRepository(), scanner);
+
         switch (choice){
-            case 1 -> new CatalogView(scanner).watch(new Movie("Batman", "aa", new ArrayList<>(), "", 2, ""));
+            case 1 -> {
+                catalogView.showMedia();
+
+                System.out.println("Please choose an movie id to watch, type 0 to get more movies or type -1 to exit");
+                int midiaChoice = scanner.nextInt();
+
+                while (midiaChoice != -1) {
+                    if (midiaChoice > 0 && midiaChoice < catalogView.getMedia().size())
+                        catalogView.watch(catalogView.getMedia().get(midiaChoice - 1));
+                    else if (midiaChoice == 0) {
+                        catalogView.nextMediaList();
+                        midiaChoice = scanner.nextInt();
+                    }
+                }
+            }
             case 2 -> System.out.println();
-            case 3 -> System.out.println();
-            case 4 -> System.out.println();
-            case 5 -> ac.addMedia(new Movie("","", new ArrayList<>(), "", 2, ""));
-            case 6 -> ac.removeMedia(new Movie("","", new ArrayList<>(), "", 2, ""));
-            case 7 -> ac.removeMedia(new Movie("","", new ArrayList<>(), "", 2, ""));
+            case 3 -> {
+                System.out.println("Your list: ");
+                user.getMyList().forEach(e -> System.out.println(STR."Name: \{e.getName()}\nImdb: \{e.getImdb()}Genre: \{e.getGenre()}"));
+            }
+            case 4 -> {
+                System.out.println("Watched history: ");
+                user.getHistory().forEach(e -> System.out.println("Name: \" + e.getName() + \"\\n\" + \"Imdb: \" + e.getImdb() + \"Genre: \" + e.getGenre()"));
+            }
+            case 5 -> ac.addMedia();
+            case 6 -> ac.removeMovie();
+            case 7 -> ac.removeSerie();
             case 0 -> System.out.println();
         }
 
@@ -50,10 +72,32 @@ public class DashboardView {
 
     private void normalUserRedirect(int choice) {
         switch (choice) {
-            case 1 -> new CatalogView(scanner).watch(new Movie("Batman", "aa", new ArrayList<>(), "", 2, ""));
+            case 1 -> {
+                catalogView.showMedia();
+
+                System.out.println("Please choose an movie id to watch, type 0 to get more movies or type -1 to exit");
+                int midiaChoice = scanner.nextInt();
+
+                while (midiaChoice != -1) {
+                    if (midiaChoice > 0 && midiaChoice < catalogView.getMedia().size())
+                        catalogView.watch(catalogView.getMedia().get(midiaChoice - 1));
+                    else if (midiaChoice == 0) {
+                        catalogView.nextMediaList();
+                        midiaChoice = scanner.nextInt();
+                    }
+                }
+            }
             case 2 -> System.out.println();
-            case 3 -> System.out.println();
-            case 4 -> System.out.println();
+            case 3 -> {
+                System.out.println("Your list: ");
+                user.getMyList().forEach(e -> {
+                    System.out.println("Name: " + e.getName() + "\n" + "Imdb: " + e.getImdb() + "Genre: " + e.getGenre());
+                });
+            }
+            case 4 -> {
+                System.out.println("Watched history: ");
+                user.getHistory().forEach(e -> System.out.println("Name: \" + e.getName() + \"\\n\" + \"Imdb: \" + e.getImdb() + \"Genre: \" + e.getGenre()"));
+            }
             case 0 -> System.out.println();
         }
     }
@@ -67,8 +111,8 @@ public class DashboardView {
                     4- History
                     ==== Admin Options ======
                     5- Insert movie/series to the catalog
-                    6- Update movie/series
-                    7- Remove movie/series
+                    6- Remove movie
+                    7- Remove series
                     0- Logout
                     """);
         } else {

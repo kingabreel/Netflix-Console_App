@@ -3,7 +3,9 @@ package org.proway.view;
 import org.proway.controller.Player;
 import org.proway.model.media.Media;
 import org.proway.model.user.User;
+import org.proway.repository.MongoRepository;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static org.proway.util.Utils.validateLoop;
@@ -11,9 +13,36 @@ import static org.proway.util.Utils.validateLoop;
 public class CatalogView {
     private final Scanner scanner;
     private final Player player;
+    private ArrayList<Media> media;
+    private static MongoRepository mongoRepository;
+    private int count = 0;
+
     public CatalogView(Scanner scanner){
         this.scanner = scanner;
         this.player = new Player<>();
+        this.media = new ArrayList<>();
+        mongoRepository = new MongoRepository();
+        getMediaFromDb();
+    }
+
+    private void getMediaFromDb(){
+        media.addAll(mongoRepository.getAllMedia());
+    }
+
+    public void showMedia(){
+        System.out.println("Movie and Series list: ");
+
+        for (int i = count; i < count + 10 && i < media.size(); i++) {
+            Media mediaLoop = media.get(i);
+            System.out.println(STR."id: \{i+1}\nName: \{mediaLoop.getName()}\nImdb: \{mediaLoop.getImdb()}\n\{mediaLoop.getGenre()}\n");
+        }
+    }
+
+    public void nextMediaList(){
+        if (count + 10 > media.size()) count += (count - media.size() * - 1);
+        else count += 10;
+
+        showMedia();
     }
 
     public void watch(Media midia){
@@ -136,4 +165,11 @@ public class CatalogView {
         return choice == 1 ? "English" : choice == 2 ? "Portuguese" : "German";
     }
 
+    public ArrayList<Media> getMedia() {
+        return media;
+    }
+
+    public int getCount() {
+        return count;
+    }
 }

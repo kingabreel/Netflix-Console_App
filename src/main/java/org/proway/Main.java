@@ -6,7 +6,8 @@ import org.proway.view.MainPageView;
 
 public class Main {
     public static void main(String[] args) {
-        CreateMoviesAndSeries createMoviesAndSeries = new CreateMoviesAndSeries(new NetflixSystem());
+        System.out.println("\t Starting application...");
+        //CreateMoviesAndSeries.fillDb();
         new MainPageView();
     }
 }
