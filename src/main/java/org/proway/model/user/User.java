@@ -1,18 +1,22 @@
 package org.proway.model.user;
 
-import org.proway.model.midia.Midia;
+import org.proway.model.media.Comment;
+import org.proway.model.media.HistoryList;
+import org.proway.model.media.Media;
+import org.proway.model.media.MediaList;
+import org.proway.util.annotations.Doc;
 
 import java.util.ArrayList;
 
-public class User {
+public class User implements MediaList, HistoryList {
     private String name;
     private String password;
     private String email;
     // plan payment
     private String plan;
     private boolean active;
-    private ArrayList<Midia> myList;
-    private ArrayList<Midia> history;
+    private ArrayList<Media> myList;
+    private ArrayList<Media> history;
     private boolean adm;
     private static ArrayList<User> userBasicInfo = new ArrayList<>();
 
@@ -77,19 +81,19 @@ public class User {
         this.active = active;
     }
 
-    public ArrayList<Midia> getMinhaLista() {
+    public ArrayList<Media> getMyList() {
         return myList;
     }
 
-    public void setMinhaLista(ArrayList<Midia> myList) {
+    public void setMyList(ArrayList<Media> myList) {
         this.myList = myList;
     }
 
-    public ArrayList<Midia> getHistory() {
+    public ArrayList<Media> getHistory() {
         return history;
     }
 
-    public void setHistory(ArrayList<Midia> history) {
+    public void setHistory(ArrayList<Media> history) {
         this.history = history;
     }
 
@@ -117,5 +121,81 @@ public class User {
             }
         }
         return user;
+
+    @Override
+    public String toString() {
+        return "nome='" + nome + '\'';
+    }
+
+    @Doc(author = "Caique Bezerra", date = "12/07/2024", version = "1.0", description = "Add a media to the user list")
+    @Override
+    public boolean addMedia(Media media) {
+        if (!myList.contains(media)) {
+            myList.add(media);
+            return true;
+        }
+        return false;
+    }
+
+    @Doc(author = "Caique Bezerra", date = "12/07/2024", version = "1.0", description = "Remove a media from the user list")
+    @Override
+    public boolean removeMedia(Media media) {
+        return myList.remove(media);
+    }
+
+    @Doc(author = "Caique Bezerra", date = "12/07/2024", version = "1.0", description = "List all media from the user list")
+    @Override
+    public ArrayList<Media> listMedia() {
+        if(myList.isEmpty()){
+            System.out.println("Empty list\n");
+        } else {
+            myList.forEach(System.out::println);
+        }
+
+        return myList;
+    }
+
+    @Doc(author = "Caique Bezerra", date = "12/07/2024", version = "1.0", description = "Add a comment to a media from the user list")
+    public boolean addCommentToMedia(Media media, Comment comment) {
+        if (myList.contains(media) || history.contains(media)) {
+            return media.addComment(comment);
+        }
+        return false;
+    }
+
+    @Doc(author = "Caique Bezerra", date = "12/07/2024", version = "1.0", description = "List all comments from a media from the user list")
+    public ArrayList<Comment> listComments(Media media) {
+        if (myList.contains(media) || history.contains(media)) {
+            return media.getComments();
+        }
+        return new ArrayList<>();
+    }
+
+    @Doc(author = "Caique Bezerra", date = "13/07/2024", version = "1.0", description = "Add a media to the user history")
+    @Override
+    public boolean addMediaToHistory(Media media) {
+        if (!history.contains(media)) {
+            history.add(media);
+            return true;
+        }
+        return false;
+    }
+
+    @Doc(author = "Caique Bezerra", date = "13/07/2024", version = "1.0", description = "Remove a media from the user history")
+    @Override
+    public boolean removeMediaFromHistory(Media media) {
+        return history.remove(media);
+    }
+
+    @Doc(author = "Caique Bezerra", date = "13/07/2024", version = "1.0", description = "List all media from the user history")
+    @Override
+    public ArrayList<Media> listHistory() {
+        if(history.isEmpty()){
+            System.out.println("Empty history\n");
+        } else {
+            history.forEach(System.out::println);
+        }
+        return history;
+
     }
 }
