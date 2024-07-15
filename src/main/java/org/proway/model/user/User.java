@@ -5,33 +5,44 @@ import org.proway.model.midia.Midia;
 import java.util.ArrayList;
 
 public class User {
-    private String nome;
+    private String name;
     private String password;
     private String email;
     // plan payment
     private String plan;
     private boolean active;
-    private ArrayList<Midia> minhaLista;
+    private ArrayList<Midia> myList;
     private ArrayList<Midia> history;
     private boolean adm;
+    private static ArrayList<User> userBasicInfo = new ArrayList<>();
 
-    public User(String nome, String password, String email, String plan, boolean active, ArrayList<Midia> minhaLista, ArrayList<Midia> history, boolean adm) {
-        this.nome = nome;
+    public User() {}
+
+    public User(String name, String password, String email, boolean adm) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.adm = adm;
+        userBasicInfo.add(this);
+    }
+
+    public User(String name, String password, String email, String plan, boolean active, ArrayList<Midia> myList, ArrayList<Midia> history, boolean adm) {
+        this.name = name;
         this.password = password;
         this.email = email;
         this.plan = plan;
         this.active = active;
-        this.minhaLista = minhaLista;
+        this.myList = myList;
         this.history = history;
         this.adm = adm;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -67,11 +78,11 @@ public class User {
     }
 
     public ArrayList<Midia> getMinhaLista() {
-        return minhaLista;
+        return myList;
     }
 
-    public void setMinhaLista(ArrayList<Midia> minhaLista) {
-        this.minhaLista = minhaLista;
+    public void setMinhaLista(ArrayList<Midia> myList) {
+        this.myList = myList;
     }
 
     public ArrayList<Midia> getHistory() {
@@ -88,5 +99,23 @@ public class User {
 
     public void setAdm(boolean adm) {
         this.adm = adm;
+    }
+
+    public ArrayList<User> getUserBasicInfo() {
+        return userBasicInfo;
+    }
+
+    public void setUserBasicInfo(ArrayList<User> userBasicInfo) {
+        this.userBasicInfo = userBasicInfo;
+    }
+
+    public static User getUserByEmail(String email) {
+        User user = null;
+        for(User u : userBasicInfo) {
+            if (u.getEmail().equals(email)) {
+                user = u;
+            }
+        }
+        return user;
     }
 }
