@@ -5,19 +5,21 @@ import org.proway.model.search.FilterMedia;
 import org.proway.model.search.FilterMovie;
 import org.proway.model.search.Series.FilterSeries;
 import org.proway.model.search.Series.FilterSeriesEpisode;
+import org.proway.repository.MongoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * SEARCHES FOR EVERY MEDIA, SERIES, SEASON OR EPISODE, INSIDE OF NETFLIX'S CATALOG
  */
 public class MediaSearchController {
-    NetflixSystem netflixSystem;
+    private MongoRepository mongoRepository;
 
-    public MediaSearchController(NetflixSystem netflixSystem) {
-        this.netflixSystem = netflixSystem;
+    public MediaSearchController(MongoRepository mongoRepository) {
+        this.mongoRepository = mongoRepository;
     }
 
     /*** MEDIA SEARCH ***/
@@ -29,33 +31,45 @@ public class MediaSearchController {
         if (mediaFilter.getMediaNamesToSearch() != null) {
             for (String nameToSearch : mediaFilter.getMediaNamesToSearch()){
                 if (md.getName().toLowerCase().contains(nameToSearch.toLowerCase())) {
-                    if (!filteredMediaList.contains(md)) {filteredMediaList.add(md);}
+                    if (!filteredMediaList.contains(md)) {
+                        filteredMediaList.add(md);
+                    }
                 }
             }
         }
 
         // synopsisSearchTerm
         if (mediaFilter.getSynopsisSearchTerm() != null) {
-            if (md.getSynopsis().toLowerCase().contains(mediaFilter.getSynopsisSearchTerm().toLowerCase())){
-                if (!filteredMediaList.contains(md)) {filteredMediaList.add(md);}
-            }
+            try {
+                if (md.getSynopsis().toLowerCase().contains(mediaFilter.getSynopsisSearchTerm().toLowerCase())){
+                    if (!filteredMediaList.contains(md)) {
+                        filteredMediaList.add(md);
+                    }
+
+                }
+            } catch (NullPointerException e) {}
         }
 
         // actorsToSearch
         if (mediaFilter.getActorsToSearch() != null) {
+            System.out.println(mediaFilter.getActorsToSearch());
             for (String actor : mediaFilter.getActorsToSearch()){
                 for (String castMember : md.getCasting()){
                     if (castMember.toLowerCase().contains(actor))
-                        if (!filteredMediaList.contains(md)) {filteredMediaList.add(md);}
+                        if (!filteredMediaList.contains(md)) {
+                            filteredMediaList.add(md);
+                        break;}
                 }
             }
         }
 
         // genresToSearch
-        if (mediaFilter.getGenresToSearch() != null) {
-            for (Genre genre : mediaFilter.getGenresToSearch()){
-                if (mediaFilter.getGenresToSearch().contains(genre))
-                    if (!filteredMediaList.contains(md)) {filteredMediaList.add(md);}
+        if (mediaFilter.getGenresToSearch() != null & !mediaFilter.getGenresToSearch().isEmpty()) {
+            String filterGenre = mediaFilter.getGenresToSearch().stream().findFirst().orElse(null);
+            if (filterGenre != null && md.getGenre().equals(filterGenre)) {
+                if (!filteredMediaList.contains(md)) {
+                    filteredMediaList.add(md);
+                }
             }
         }
 
@@ -96,7 +110,7 @@ public class MediaSearchController {
     public ArrayList<Series> searchForMediaSeries(FilterSeries seriesFilter) {
         ArrayList<Series> filteredSeriesList = new ArrayList<>();
 
-        for (Series sr :  netflixSystem.getSeriesCatalog().stream().toList())
+        for (Series sr :  mongoRepository.getSeries().stream().toList())
         {
             /* Filter Media */
             filteredSeriesList.addAll(this.searchForMedia(sr, seriesFilter));
@@ -104,14 +118,14 @@ public class MediaSearchController {
             /* Filter Series */
             // numberOfEpisodesIntervalStartEnd (Number of episodes in a range)
             if (seriesFilter.getNumberOfEpisodesIntervalStart() != null && seriesFilter.getNumberOfEpisodesIntervalEnd() != null) {
-                if (sr.getTotalEpisodes() >= seriesFilter.getNumberOfEpisodesIntervalStart() && sr.getTotalEpisodes() <= seriesFilter.getNumberOfEpisodesIntervalEnd()){
+                if (sr.getTotalEpisode() >= seriesFilter.getNumberOfEpisodesIntervalStart() && sr.getTotalEpisode() <= seriesFilter.getNumberOfEpisodesIntervalEnd()){
                     if (!filteredSeriesList.contains(sr)) {filteredSeriesList.add(sr);}
                 }
             }
 
             // numberOfEpisodesIntervalEnd (Number of episodes up to a total inclusive)
             if (seriesFilter.getNumberOfEpisodesIntervalStart() == null && seriesFilter.getNumberOfEpisodesIntervalEnd() != null) {
-                if (sr.getTotalEpisodes() <= seriesFilter.getNumberOfEpisodesIntervalEnd()){
+                if (sr.getTotalEpisode() <= seriesFilter.getNumberOfEpisodesIntervalEnd()){
                     if (!filteredSeriesList.contains(sr)) {filteredSeriesList.add(sr);}
                 }
             }
@@ -124,7 +138,7 @@ public class MediaSearchController {
     public List<Episode> searchForMediaSeriesSeason(Series series, Integer SeasonNumber) {
         List<Episode> filteredSeriesSeasonsList = new ArrayList<>();
 
-        for (Series sr :  netflixSystem.getSeriesCatalog().stream().toList())
+        for (Series sr :  mongoRepository.getSeries().stream().toList())
         {
             /* Filter Season */
             for (Map.Entry<Integer, List<Episode>> SeEntry : sr.getSeasons().entrySet()) {
@@ -143,7 +157,7 @@ public class MediaSearchController {
         List<Episode> filteredSeriesEpisodeList = new ArrayList<>();
         boolean dontFilterEpisodesBySeason = (SeasonNumber == null);
 
-        for (Series sr : netflixSystem.getSeriesCatalog().stream().toList())
+        for (Series sr : mongoRepository.getSeries().stream().toList())
         {
             // Filter Season
             for (Map.Entry<Integer, List<Episode>> SeEntry : sr.getSeasons().entrySet()) {
@@ -193,7 +207,7 @@ public class MediaSearchController {
     public ArrayList<Movie> searchForMovie(FilterMovie movieFilter) {
         ArrayList<Movie> filteredMovieList = new ArrayList<>();
 
-        for (Movie mv : netflixSystem.getMovieCatalog().stream().toList())
+        for (Movie mv : mongoRepository.getMovie().stream().toList())
         {
             /* Filter Media */
             filteredMovieList.addAll(this.searchForMedia(mv, movieFilter));

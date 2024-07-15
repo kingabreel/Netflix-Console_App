@@ -22,23 +22,16 @@ public class User implements MediaList, HistoryList {
 
     public User() {}
 
-    public User(String name, String password, String email, boolean adm) {
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.adm = adm;
-        userBasicInfo.add(this);
-    }
-
-    public User(String name, String password, String email, String plan, boolean active, ArrayList<Midia> myList, ArrayList<Midia> history, boolean adm) {
+    public User(String name, String password, String email, String plan, boolean active, boolean adm) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.plan = plan;
         this.active = active;
-        this.myList = myList;
-        this.history = history;
+        this.myList = new ArrayList<>();
+        this.history = new ArrayList<>();
         this.adm = adm;
+        userBasicInfo.add(this);
     }
 
     public String getName() {
@@ -121,10 +114,11 @@ public class User implements MediaList, HistoryList {
             }
         }
         return user;
+    }
 
     @Override
     public String toString() {
-        return "nome='" + nome + '\'';
+        return "name='" + name + '\'';
     }
 
     @Doc(author = "Caique Bezerra", date = "12/07/2024", version = "1.0", description = "Add a media to the user list")

@@ -51,7 +51,7 @@ public class Comment {
 
     @Override
     public String toString() {
-        return "user=" + user.getNome() +
+        return "user=" + user.getName() +
                 ", comment='" + content + '\'' +
                 ", date=" + date +
                 '}';

@@ -4,7 +4,7 @@ import org.proway.model.media.Media;
 
 import java.util.ArrayList;
 
-public class MidiaController {
+public class MediaController {
     private ArrayList<Media> mediaList = new ArrayList<Media>();
 
     // addMidia

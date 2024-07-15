@@ -20,7 +20,9 @@ public abstract class Media {
         this.genre = genre;
         this.imdb = imdb;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        this.releaseDate = LocalDate.parse(releaseDate, formatter);
+        try {
+            this.releaseDate = LocalDate.parse(releaseDate, formatter);
+        } catch (NullPointerException DateTimeParseException) {}
     }
 
     public String getName() {

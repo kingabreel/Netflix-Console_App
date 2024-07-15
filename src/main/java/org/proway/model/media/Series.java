@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Series extends Media {
-    private String episodeTitle;
     private int totalSeason;
     private int totalEpisode;
     private int averageDurationEpisode;
@@ -16,14 +15,6 @@ public class Series extends Media {
     public Series(String name, String synopsis, ArrayList<String> casting, String genre, double imdb, String releaseDate) {
         super(name, synopsis, casting, genre, imdb, releaseDate);
         this.seasons = new HashMap<>();
-    }
-
-    public String getEpisodeTitle() {
-        return episodeTitle;
-    }
-
-    public void setEpisodeTitle(String episodeTitle) {
-        this.episodeTitle = episodeTitle;
     }
 
     public int getTotalSeason() {

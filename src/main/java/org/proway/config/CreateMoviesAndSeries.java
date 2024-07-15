@@ -1,76 +1,114 @@
 package org.proway.config;
 
-import org.proway.controller.NetflixSystem;
-import org.proway.model.media.Episode;
-import org.proway.model.media.Genre;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.proway.model.media.Movie;
 import org.proway.model.media.Series;
+import org.proway.repository.MongoRepository;
 
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 
 public class CreateMoviesAndSeries {
-    private NetflixSystem netflixSystem;
+    private static MongoRepository mongoRepository;
+    private static final String MOVIE_API_URL = "https://yts.mx/api/v2/list_movies.json?limit=50";
+    private static final String SERIE_API_URL = "https://api.tvmaze.com/shows";
 
-    public NetflixSystem getNetflixSystem() {
-        return netflixSystem;
+    public static void fillDb(){
+        mongoRepository = new MongoRepository();
+
+        ArrayList<Movie> movies = fetchMovies();
+        ArrayList<Series> series = fetchSeries();
+
+        for (Movie m : movies) {
+            mongoRepository.addMovie(m);
+        }
+
+        for (Series s : series) {
+            mongoRepository.addSerie(s);
+        }
     }
 
-    public void setNetflixSystem(NetflixSystem netflixSystem) {
-        this.netflixSystem = netflixSystem;
+    private static ArrayList<Movie> fetchMovies() {
+        ArrayList<Movie> movies = new ArrayList<>();
+        try {
+            StringBuilder content = getAllMidia(MOVIE_API_URL);
+
+            JSONObject json = new JSONObject(content.toString());
+            JSONArray moviesArray = json.getJSONObject("data").getJSONArray("movies");
+
+            for (int i = 0; i < moviesArray.length(); i++) {
+                JSONObject movieJson = moviesArray.getJSONObject(i);
+                String name = movieJson.getString("title");
+                String synopsis = movieJson.getString("synopsis");
+                ArrayList<String> casting = new ArrayList<>();
+                String genre = movieJson.getJSONArray("genres").getString(0);
+                double imdb = movieJson.getDouble("rating");
+
+                Movie movie = new Movie(name, synopsis, casting, imdb, "01-01-2000", genre);
+                movie.setDurationMinutes(movieJson.getInt("runtime"));
+                movies.add(movie);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return movies;
     }
 
-    public CreateMoviesAndSeries(NetflixSystem netflixSystem) {
-        this.netflixSystem = netflixSystem;
-        addMovies();
-        addSeries();
+    private static ArrayList<Series> fetchSeries() {
+        ArrayList<Series> seriesList = new ArrayList<>();
+        try {
+            StringBuilder content = getAllMidia(SERIE_API_URL);
+
+            JSONArray seriesArray = new JSONArray(content.toString());
+
+            for (int i = 0; i < seriesArray.length(); i++) {
+                JSONObject seriesJson = seriesArray.getJSONObject(i);
+                String name = seriesJson.getString("name");
+                String synopsis = seriesJson.getString("summary");
+                ArrayList<String> casting = new ArrayList<>();
+
+                JSONArray genreArray = seriesJson.getJSONArray("genres");
+                String genre = "";
+                if (!genreArray.isEmpty()) genre = genreArray.getString(0);
+
+                JSONObject imdbJson = seriesJson.getJSONObject("rating");
+                double imdb = 0;
+                if (imdbJson.has("average") && !imdbJson.isNull("average")) {
+                    imdb = imdbJson.getDouble("average");
+                }
+
+                String releaseDate = seriesJson.getString("premiered");
+
+                Series series = new Series(name, synopsis, casting, genre, imdb, releaseDate);
+                series.setAverageDurationEpisode((int) seriesJson.getDouble("averageRuntime"));
+                seriesList.add(series);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return seriesList;
     }
 
-    private void addMovies(){
-        Movie filmeDoBatman = new Movie(
-                "Spider-Man",
-                "\"Spider-Man\" centers on student Peter Parker (Tobey Maguire) who, after being bitten by a genetically-altered spider, gains superhuman strength and the spider-like ability to cling to any surface. He vows to use his abilities to fight crime, coming to understand the words of his beloved Uncle Ben: \"With great power comes great responsibility.\"",
-                new ArrayList<String>(Arrays.asList("Tobey Maguire", "Willem Dafoe", "Kirsten Dunst", "James Franco", "Cliff Robertson")),
-                7.4,
-                "2002-05-03",
-                Genre.ACTION,
-                121
-        );
+    private static StringBuilder getAllMidia(String apiURL) throws IOException {
+        URL url = new URL(apiURL);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
 
-        netflixSystem.getCatalog().add(filmeDoBatman);
-    }
+        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        String inputLine;
+        StringBuilder content = new StringBuilder();
+        while ((inputLine = in.readLine()) != null) {
+            content.append(inputLine);
+        }
 
-    private void addSeries(){
-        Series theBoys = new Series(
-                "The Boys",
-                "Superheroes are often as popular as celebrities, as influential as politicians, and sometimes even as revered as gods. But that's when they're using their powers for good. What happens when the heroes go rogue and start abusing their powers? When it's the powerless against the super powerful, the Boys head out on a heroic quest to expose the truth about the Seven and Vought, the multibillion-dollar conglomerate that manages the superheroes and covers up their dirty secrets. Based on the comic book series of the same name.",
-                new ArrayList<String>(Arrays.asList("Philip Sgriccia", "Frederick E.O. Toye", "Sarah Boyd", "Eric Kripke", "CStefan Schwartz")),
-                8.7,
-                "2019-07-26",
-                Genre.COMEDY,
-                60
-        );
+        in.close();
+        conn.disconnect();
 
-        Map<Integer, List<Episode>> seasons = new HashMap<Integer, List<Episode>>();
-        List<Episode> episodes = new ArrayList<Episode>();
-        Episode EPone = new Episode(
-                "The Name of the Game",
-                60,
-                1,
-                1,
-                "Hughie Campbell suffers mental trauma after his girlfriend Robin is killed in a high-velocity impact with celebrity superhero A-Train. Lawyers from Vought International offer a $45,000 settlement, which Hughie hesitates to accept. Aspiring superhero Annie January auditions as \"Starlight\" and is accepted to join the Seven, following the retirement of the Lamplighter. Arriving at Seven headquarters, she is greeted by the Deep, who blackmails her into giving him oral sex.[6] Billy Butcher offers Hughie a chance to expose superhero corruption. Butcher takes Hughie to a secret \"Supes club\", and shows him security footage of A-Train laughing about Robin's death. Butcher asks Hughie to take the settlement money and to plant a bug at Seven Tower, but Hughie refuses. In Central Park, Annie meets Hughie. They motivate each other to stand up for themselves, and face their challenges. Hughie plants the bug. Translucent discovers the bug and confronts Hughie alone at work. Butcher arrives and together they incapacitate Translucent. Elsewhere, Homelander shoots down the Mayor of Baltimore's plane, owing to his attempts to blackmail Vought."
-        );
-        episodes.add(EPone);
-        Episode EPtwo = new Episode(
-                "Cherry",
-                60,
-                1,
-                2,
-                "Butcher and Hughie take Translucent to Frenchie, who makes a meta-bullet to pierce his diamond-hard skin, but it fails to kill Translucent. Butcher turns to CIA Dept. Director Susan Raynor for the \"Mallory files\", but she refuses. Vought VP Madelyn Stillwell tells Seven leader Homelander about the evidence Deep found incriminating him for the plane crash, so she handles it while he talks to Deep. The night Starlight teams-up with the Deep, she promises to kill him if he ever tries to sexually assault her again. Stillwell blackmails Oklahoma Senator Calhoun into allowing a vote that could enable Vought to contract superheros to the military. Annie stops a rape, unaware she is being recorded. Her agent, Ashley, rages at her because of the negative exposure and legal implications. While Homelander searches for Translucent, Frenchie decides to place C-4 in Translucent's colon, who then fearfully reveals A-Train was with his girlfriend Popclaw before he killed Robin. They learn Homelander is nearby, and cannot risk killing Translucent. Frenchie and Butcher cause an explosive distraction.—Aaron Kyle"
-                );
-        episodes.add(EPtwo);
-        seasons.put(1, episodes);
-        theBoys.addSeason(seasons);
-
-        netflixSystem.getCatalog().add(theBoys);
+        return content;
     }
 }

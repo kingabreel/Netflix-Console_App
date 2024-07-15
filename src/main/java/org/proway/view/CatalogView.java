@@ -3,31 +3,60 @@ package org.proway.view;
 import org.proway.controller.Player;
 import org.proway.model.media.Comment;
 import org.proway.model.media.Media;
-import org.proway.model.media.Movie;
 import org.proway.model.user.User;
+import org.proway.repository.MongoRepository;
 
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.Scanner;
+
+import static org.proway.util.Utils.validateLoop;
 
 public class CatalogView {
     private final Scanner scanner;
     private final Player player;
-    private User currentUser;
+    private ArrayList<Media> media;
+    private static MongoRepository mongoRepository;
+    private int count = 0;
+    private final User currentUser;
+    private Media currentMedia;
 
     public CatalogView(Scanner scanner, User currentUser) {
         this.scanner = scanner;
         this.player = new Player<>();
+        this.media = new ArrayList<>();
         this.currentUser = currentUser;
+        mongoRepository = new MongoRepository();
+        getMediaFromDb();
+    }
+
+    private void getMediaFromDb(){
+        media.addAll(mongoRepository.getAllMedia());
+    }
+
+    public void showMedia(){
+        System.out.println("Movie and Series list: ");
+
+        for (int i = count; i < count + 10 && i < media.size(); i++) {
+            Media mediaLoop = media.get(i);
+            System.out.println(STR."id: \{i+1}\nName: \{mediaLoop.getName()}\nImdb: \{mediaLoop.getImdb()}\n\{mediaLoop.getGenre()}\n");
+        }
+    }
+
+    public void nextMediaList(){
+        if (count + 10 > media.size()) count += (count - media.size() * - 1);
+        else count += 10;
+
+        showMedia();
     }
 
     public void watch(Media media) {
         System.out.println("Movie configuration: ");
-        configureMovie(media);
-        this.player.setMidia(media);
-        this.player.startPlayer();
+        currentMedia = media;
+        configureMovie();
     }
 
-    public void configureMovie(Media media) {
+    public void configureMovie(){
         boolean configurating = true;
 
         while (configurating) {
@@ -38,11 +67,12 @@ public class CatalogView {
                     4- Video quality
                     5- Watch
                     6- Add to my list
+                    7- Return
                     """);
 
             int userChoice = scanner.nextInt();
 
-            while (validateLoop(userChoice, 6)) {
+            while (validateLoop(userChoice, 7)) {
                 System.out.println("Invalid option, try again: ");
                 userChoice = scanner.nextInt();
             }
@@ -91,14 +121,22 @@ public class CatalogView {
                 }
                 case 5 -> {
                     configurating = false;
-
-                    currentUser.addMediaToHistory(media);
+                    this.player.setMidia(currentMedia);
 
                     player.startPlayer();
 
-                    userInfoForMovie(currentUser, media);
+                    currentUser.addMediaToHistory(currentMedia);
+
+                    mongoRepository.addMediaToHistory(currentUser, currentMedia);
+
+                    userInfoForMovie(currentUser, currentMedia);
                 }
-                case 6 -> currentUser.addMedia(media);
+                case 6 -> {
+                    currentUser.addMedia(currentMedia);
+                    mongoRepository.addMediaToMyList(currentUser, currentMedia);
+                    System.out.println("Media added to my list");
+                }
+                case 7 -> configurating = false;
 
             }
         }
@@ -160,8 +198,11 @@ public class CatalogView {
         return choice == 1 ? "English" : choice == 2 ? "Portuguese" : "German";
     }
 
-    private boolean validateLoop(int var, int y) {
-        return var < 1 || var > y;
+    public ArrayList<Media> getMedia() {
+        return media;
     }
 
+    public int getCount() {
+        return count;
+    }
 }
