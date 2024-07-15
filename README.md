@@ -1,6 +1,6 @@
 ### 💡 Sobre o projeto:
 
-Este projeto é um desafio de criação de um sistema que simula um streaming de vídeo avaliação do bootcamp da T-Systems.
+Este projeto é um desafio de criação de um sistema que simula um streaming de vídeo para avaliação do bootcamp da T-Systems.
 
 ##
 
@@ -10,7 +10,7 @@ Este projeto é um desafio de criação de um sistema que simula um streaming de
 - Docker*
 - MongoDB
 
-- *Obrigatório para rodar o projeto
+- *Obrigatório para executar o projeto
 
 ##
 
