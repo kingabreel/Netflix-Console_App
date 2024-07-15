@@ -15,16 +15,16 @@ public class FilterMovie extends FilterMedia {
 
     public FilterMovie(ArrayList<String> midiaNamesToSarch, String synopsisSearchTerm, ArrayList<String> actorsToSearch, ArrayList<String> genreToSearch, double imdbScoreIntervalStart, double imdbScoreIntervalEnd, LocalDate releaseDateIntervalStart, LocalDate releaseDateIntervalEnd, Integer durationMinutesIntervalStart, Integer durationMinutesIntervalEnd) {
         super(midiaNamesToSarch, synopsisSearchTerm, actorsToSearch, genreToSearch, imdbScoreIntervalStart, imdbScoreIntervalEnd, releaseDateIntervalStart, releaseDateIntervalEnd);
-        this.emptyAllFilters();
+        this.emptyAllFiltersMovie();
         this.durationMinutesIntervalStart = durationMinutesIntervalStart;
         this.durationMinutesIntervalEnd = durationMinutesIntervalEnd;
     }
 
     public FilterMovie() {
-        this.emptyAllFilters();
+        this.emptyAllFiltersMovie();
     }
 
-    public void emptyAllFilters()
+    public void emptyAllFiltersMovie()
     {
         durationMinutesIntervalStart = null;
         durationMinutesIntervalEnd = null;

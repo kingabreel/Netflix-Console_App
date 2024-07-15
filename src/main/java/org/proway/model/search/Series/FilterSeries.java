@@ -14,8 +14,6 @@ public class FilterSeries extends FilterMedia {
     private int averageDurationEpisode;
     private Map<Integer, List<Episode>> seasons;
     */
-    private Integer numberOfEpisodesIntervalStart;
-    private Integer numberOfEpisodesIntervalEnd;
 
     private Integer numberOfSeasonIntervalStart;
     private Integer numberOfSeasonIntervalEnd;
@@ -31,9 +29,7 @@ public class FilterSeries extends FilterMedia {
 
     public FilterSeries(ArrayList<String> midiaNamesToSarch, String synopsisSearchTerm, ArrayList<String> actorsToSearch, ArrayList<String> genreToSearch, double imdbScoreIntervalStart, double imdbScoreIntervalEnd, LocalDate releaseDateIntervalStart, LocalDate releaseDateIntervalEnd, Integer numberOfEpisodesIntervalStart, Integer numberOfEpisodesIntervalEnd, Integer numberOfSeasonIntervalStart, Integer numberOfSeasonIntervalEnd, Integer totalSeasonIntervalStart, Integer totalSeasonIntervalEnd, Integer totalEpisodesIntervalStart, Integer totalEpisodesIntervalEnd, Integer averageDurationEpisodeIntervalStart, Integer averageDurationEpisodeIntervalEnd) {
         super(midiaNamesToSarch, synopsisSearchTerm, actorsToSearch, genreToSearch, imdbScoreIntervalStart, imdbScoreIntervalEnd, releaseDateIntervalStart, releaseDateIntervalEnd);
-        this.emptyAllFilters();
-        this.numberOfEpisodesIntervalStart = numberOfEpisodesIntervalStart;
-        this.numberOfEpisodesIntervalEnd = numberOfEpisodesIntervalEnd;
+        this.emptyAllFiltersSeries();
         this.numberOfSeasonIntervalStart = numberOfSeasonIntervalStart;
         this.numberOfSeasonIntervalEnd = numberOfSeasonIntervalEnd;
         this.totalSeasonIntervalStart = totalSeasonIntervalStart;
@@ -45,13 +41,11 @@ public class FilterSeries extends FilterMedia {
     }
 
     public FilterSeries() {
-        this.emptyAllFilters();
+        this.emptyAllFiltersSeries();
     }
 
-    public void emptyAllFilters()
+    public void emptyAllFiltersSeries()
     {
-        numberOfEpisodesIntervalStart = null;
-        numberOfEpisodesIntervalEnd = null;
         numberOfSeasonIntervalStart = null;
         numberOfSeasonIntervalEnd = null;
         totalSeasonIntervalStart = null;
@@ -62,83 +56,59 @@ public class FilterSeries extends FilterMedia {
         averageDurationEpisodeIntervalEnd = null;
     }
 
-    public Integer getNumberOfEpisodesIntervalStart() {
-        return numberOfEpisodesIntervalStart;
+    public void setNumberOfEpisodesInterval(Integer totalEpisodesIntervalStart, Integer totalEpisodesIntervalEnd) {
+        this.totalEpisodesIntervalStart = totalEpisodesIntervalStart;
+        this.totalEpisodesIntervalEnd = totalEpisodesIntervalEnd;
+    }
+    public void setNumberOfEpisodesInterval(Integer totalEpisodesIntervalEnd) {
+        this.totalEpisodesIntervalEnd = totalEpisodesIntervalEnd;
     }
 
-    public void setNumberOfEpisodesIntervalStart(Integer numberOfEpisodesIntervalStart) {
-        this.numberOfEpisodesIntervalStart = numberOfEpisodesIntervalStart;
+    public void setNumberOfSeasonInterval(Integer totalSeasonIntervalStart, Integer totalSeasonIntervalEnd) {
+        this.totalSeasonIntervalStart = totalSeasonIntervalStart;
+        this.totalSeasonIntervalEnd = totalSeasonIntervalEnd;
+    }
+    public void setNumberOfSeasonInterval(Integer totalSeasonIntervalEnd) {
+        this.totalSeasonIntervalEnd = totalSeasonIntervalEnd;
     }
 
-    public Integer getNumberOfEpisodesIntervalEnd() {
-        return numberOfEpisodesIntervalEnd;
+    public void setAverageDurationEpisodeInterval(Integer averageDurationEpisodeIntervalStart, Integer averageDurationEpisodeIntervalEnd) {
+        this.averageDurationEpisodeIntervalStart = averageDurationEpisodeIntervalStart;
+        this.averageDurationEpisodeIntervalEnd = averageDurationEpisodeIntervalEnd;
     }
-
-    public void setNumberOfEpisodesIntervalEnd(Integer numberOfEpisodesIntervalEnd) {
-        this.numberOfEpisodesIntervalEnd = numberOfEpisodesIntervalEnd;
+    public void setAverageDurationEpisodeInterval(Integer averageDurationEpisodeIntervalEnd) {
+        this.averageDurationEpisodeIntervalEnd = averageDurationEpisodeIntervalEnd;
     }
 
     public Integer getNumberOfSeasonIntervalStart() {
         return numberOfSeasonIntervalStart;
     }
 
-    public void setNumberOfSeasonIntervalStart(Integer numberOfSeasonIntervalStart) {
-        this.numberOfSeasonIntervalStart = numberOfSeasonIntervalStart;
-    }
-
     public Integer getNumberOfSeasonIntervalEnd() {
         return numberOfSeasonIntervalEnd;
-    }
-
-    public void setNumberOfSeasonIntervalEnd(Integer numberOfSeasonIntervalEnd) {
-        this.numberOfSeasonIntervalEnd = numberOfSeasonIntervalEnd;
     }
 
     public Integer getTotalSeasonIntervalStart() {
         return totalSeasonIntervalStart;
     }
 
-    public void setTotalSeasonIntervalStart(Integer totalSeasonIntervalStart) {
-        this.totalSeasonIntervalStart = totalSeasonIntervalStart;
-    }
-
     public Integer getTotalSeasonIntervalEnd() {
         return totalSeasonIntervalEnd;
-    }
-
-    public void setTotalSeasonIntervalEnd(Integer totalSeasonIntervalEnd) {
-        this.totalSeasonIntervalEnd = totalSeasonIntervalEnd;
     }
 
     public Integer getTotalEpisodesIntervalStart() {
         return totalEpisodesIntervalStart;
     }
 
-    public void setTotalEpisodesIntervalStart(Integer totalEpisodesIntervalStart) {
-        this.totalEpisodesIntervalStart = totalEpisodesIntervalStart;
-    }
-
     public Integer getTotalEpisodesIntervalEnd() {
         return totalEpisodesIntervalEnd;
-    }
-
-    public void setTotalEpisodesIntervalEnd(Integer totalEpisodesIntervalEnd) {
-        this.totalEpisodesIntervalEnd = totalEpisodesIntervalEnd;
     }
 
     public Integer getAverageDurationEpisodeIntervalStart() {
         return averageDurationEpisodeIntervalStart;
     }
 
-    public void setAverageDurationEpisodeIntervalStart(Integer averageDurationEpisodeIntervalStart) {
-        this.averageDurationEpisodeIntervalStart = averageDurationEpisodeIntervalStart;
-    }
-
     public Integer getAverageDurationEpisodeIntervalEnd() {
         return averageDurationEpisodeIntervalEnd;
-    }
-
-    public void setAverageDurationEpisodeIntervalEnd(Integer averageDurationEpisodeIntervalEnd) {
-        this.averageDurationEpisodeIntervalEnd = averageDurationEpisodeIntervalEnd;
     }
 }

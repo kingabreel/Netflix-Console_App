@@ -2,6 +2,7 @@ package org.proway.model.search;
 
 import org.proway.model.media.Genre;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
@@ -38,10 +39,10 @@ public abstract class FilterMedia {
     }
 
     public FilterMedia() {
-        this.emptyAllFilters();
+        this.emptyAllFiltersMedia();
     }
 
-    public void emptyAllFilters()
+    public void emptyAllFiltersMedia()
     {
         mediaNamesToSearch = null;
         synopsisSearchTerm = null;
@@ -78,17 +79,19 @@ public abstract class FilterMedia {
         this.imdbScoreIntervalEnd = imdbScoreIntervalEnd;
     }
 
-    public void setReleaseDateInterval(LocalDate releaseDateIntervalEnd) {
-        this.releaseDateIntervalEnd = releaseDateIntervalEnd;
-    }
-
-    public void setReleaseDateInterval(LocalDate releaseDateIntervalStart ,LocalDate releaseDateIntervalEnd) {
-        this.releaseDateIntervalStart = releaseDateIntervalStart;
-        this.releaseDateIntervalEnd = releaseDateIntervalEnd;
+    public void setReleaseDateInterval(String releaseDateIntervalEnd) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.releaseDateIntervalEnd = LocalDate.parse(releaseDateIntervalEnd, formatter);
     }
 
     public void setGenreSearchTerm(String genreSearchTerm) {
         this.genreSearchTerm = genreSearchTerm;
+    }
+
+    public void setReleaseDateInterval(String releaseDateIntervalStart ,String releaseDateIntervalEnd) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.releaseDateIntervalStart = LocalDate.parse(releaseDateIntervalStart, formatter);
+        this.releaseDateIntervalEnd = LocalDate.parse(releaseDateIntervalEnd, formatter);
     }
 
     public ArrayList<String> getMediaNamesToSearch() {

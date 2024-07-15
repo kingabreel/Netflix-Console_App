@@ -7,24 +7,24 @@ import java.util.ArrayList;
 public class MediaController {
     private ArrayList<Media> mediaList = new ArrayList<Media>();
 
-    // addMidia
-    public void addMidia(Media media) {
+    // addMedia
+    public void addMedia(Media media) {
         mediaList.add(media);
     }
 
-    // getMidia
-    public Media getMidia(Integer index){
+    // getMedia
+    public Media getMedia(Integer index){
         return mediaList.get(index);
     }
 
-    // updateMidia
-    public void updateMidia(Media media, Integer index) {
+    // updateMedia
+    public void updateMedia(Media media, Integer index) {
 
         mediaList.set(index, media);
     }
 
-    // removeMidia
-    public void removeMidia(Integer index) {
+    // removeMedia
+    public void removeMedia(Integer index) {
 
         mediaList.remove(index);
     }

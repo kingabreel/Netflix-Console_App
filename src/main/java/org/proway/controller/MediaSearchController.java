@@ -23,132 +23,207 @@ public class MediaSearchController {
     }
 
     /*** MEDIA SEARCH ***/
-    // Search for any Media
-    public <M extends Media> ArrayList<M> searchForMedia(M md, FilterMedia mediaFilter) {
-        ArrayList<M> filteredMediaList = new ArrayList<>();
+    // Gets if a Media matches a media filter
+    public <M extends Media> M filterMatchMedia(M md, FilterMedia mediaFilter) {
+        boolean itMatchesSomething;
+
+        /**
+         * If a filter exists, it is supposed to match with media's data,
+         * if it doesn't, it should return empty. This for every filter.
+         */
 
         // MediaNamesToSearch
         if (mediaFilter.getMediaNamesToSearch() != null) {
+            itMatchesSomething = false;
             for (String nameToSearch : mediaFilter.getMediaNamesToSearch()){
                 if (md.getName().toLowerCase().contains(nameToSearch.toLowerCase())) {
-                    if (!filteredMediaList.contains(md)) {
-                        filteredMediaList.add(md);
-                    }
+                    itMatchesSomething = true;
                 }
+            }
+            if (!itMatchesSomething) {
+                return null;
             }
         }
 
         // synopsisSearchTerm
         if (mediaFilter.getSynopsisSearchTerm() != null) {
-            try {
-                if (md.getSynopsis().toLowerCase().contains(mediaFilter.getSynopsisSearchTerm().toLowerCase())){
-                    if (!filteredMediaList.contains(md)) {
-                        filteredMediaList.add(md);
-                    }
-
-                }
-            } catch (NullPointerException e) {}
+            itMatchesSomething = false;
+            if (md.getSynopsis().toLowerCase().contains(mediaFilter.getSynopsisSearchTerm().toLowerCase())){
+                itMatchesSomething = true;
+            }
+            if (!itMatchesSomething) {
+                return null;
+            }
         }
 
         // actorsToSearch
         if (mediaFilter.getActorsToSearch() != null) {
-            System.out.println(mediaFilter.getActorsToSearch());
+            itMatchesSomething = false;
             for (String actor : mediaFilter.getActorsToSearch()){
                 for (String castMember : md.getCasting()){
-                    if (castMember.toLowerCase().contains(actor))
-                        if (!filteredMediaList.contains(md)) {
-                            filteredMediaList.add(md);
-                        break;}
+                    if (castMember.equalsIgnoreCase(actor))
+                        itMatchesSomething = true;
                 }
+            }
+            if (!itMatchesSomething) {
+                return null;
             }
         }
 
         // genresToSearch
-        if (mediaFilter.getGenresToSearch() != null & !mediaFilter.getGenresToSearch().isEmpty()) {
-            String filterGenre = mediaFilter.getGenresToSearch().stream().findFirst().orElse(null);
-            if (filterGenre != null && md.getGenre().equals(filterGenre)) {
-                if (!filteredMediaList.contains(md)) {
-                    filteredMediaList.add(md);
-                }
+        if (mediaFilter.getGenresToSearch() != null) {
+            itMatchesSomething = false;
+            if (mediaFilter.getGenresToSearch().contains(md.getMediaGenre()))
+                itMatchesSomething = true;
+            if (!itMatchesSomething) {
+                return null;
             }
         }
 
         // imdbScoreIntervalStartEnd (Interval between two scores)
-        if (mediaFilter.getImdbScoreIntervalStart() != -1 && mediaFilter.getImdbScoreIntervalEnd() != -1) {
+        if (mediaFilter.getImdbScoreIntervalStart() != -1.0 && mediaFilter.getImdbScoreIntervalEnd() != -1.0) {
+            itMatchesSomething = false;
             if (md.getImdb() >= mediaFilter.getImdbScoreIntervalStart() && md.getImdb() <= mediaFilter.getImdbScoreIntervalEnd()){
-                if (!filteredMediaList.contains(md)) {filteredMediaList.add(md);}
+                itMatchesSomething = true;
+            }
+            if (!itMatchesSomething) {
+                return null;
             }
         }
 
         // imdbScoreIntervalEnd (Filters all media up to a certain score)
-        if (mediaFilter.getImdbScoreIntervalStart() == -1 && mediaFilter.getImdbScoreIntervalEnd() != -1) {
+        if (mediaFilter.getImdbScoreIntervalStart() == -1.0 && mediaFilter.getImdbScoreIntervalEnd() != -1.0) {
+            itMatchesSomething = false;
             if (md.getImdb() <= mediaFilter.getImdbScoreIntervalEnd()){
-                if (!filteredMediaList.contains(md)) {filteredMediaList.add(md);}
+                itMatchesSomething = true;
+            }
+            if (!itMatchesSomething) {
+                return null;
             }
         }
 
         // releaseDateIntervalStartEnd (Interval between two LocalDate values)
         if (mediaFilter.getReleaseDateIntervalStart() != null && mediaFilter.getReleaseDateIntervalEnd() != null) {
+            itMatchesSomething = false;
             if (md.getReleaseDate().isAfter(mediaFilter.getReleaseDateIntervalStart()) &&
                 md.getReleaseDate().isBefore(mediaFilter.getReleaseDateIntervalEnd())) {
-                if (!filteredMediaList.contains(md)) {filteredMediaList.add(md);}
+                itMatchesSomething = true;
+            }
+            if (!itMatchesSomething) {
+                return null;
             }
         }
 
         // releaseDateIntervalEnd (Filters all media released until a certain LocalDate)
         if (mediaFilter.getReleaseDateIntervalStart() == null && mediaFilter.getReleaseDateIntervalEnd() != null) {
+            itMatchesSomething = false;
             if (md.getReleaseDate().isBefore(mediaFilter.getReleaseDateIntervalEnd())) {
-                if (!filteredMediaList.contains(md)) {filteredMediaList.add(md);}
+                itMatchesSomething = true;
+            }
+            if (!itMatchesSomething) {
+                return null;
             }
         }
 
-        return filteredMediaList;
+        return md;
     }
 
     /*** SERIES SEARCH ***/
     // Search Series
     public ArrayList<Series> searchForMediaSeries(FilterSeries seriesFilter) {
         ArrayList<Series> filteredSeriesList = new ArrayList<>();
+        boolean itMatchesSomething;
 
         for (Series sr :  mongoRepository.getSeries().stream().toList())
         {
-            /* Filter Media */
-            filteredSeriesList.addAll(this.searchForMedia(sr, seriesFilter));
-
-            /* Filter Series */
-            // numberOfEpisodesIntervalStartEnd (Number of episodes in a range)
-            if (seriesFilter.getNumberOfEpisodesIntervalStart() != null && seriesFilter.getNumberOfEpisodesIntervalEnd() != null) {
-                if (sr.getTotalEpisode() >= seriesFilter.getNumberOfEpisodesIntervalStart() && sr.getTotalEpisode() <= seriesFilter.getNumberOfEpisodesIntervalEnd()){
-                    if (!filteredSeriesList.contains(sr)) {filteredSeriesList.add(sr);}
+            /* Filter Medias */
+            if (sr.equals(this.filterMatchMedia(sr, seriesFilter)))
+            {
+                /* Filter Series */
+                // TotalEpisodesIntervalStartEnd (Number of episodes in a range)
+                if (seriesFilter.getTotalEpisodesIntervalStart() != null && seriesFilter.getTotalEpisodesIntervalEnd() != null) {
+                    itMatchesSomething = false;
+                    if (sr.getTotalEpisode() >= seriesFilter.getTotalEpisodesIntervalStart() && sr.getTotalEpisodes() <= seriesFilter.getTotalEpisodesIntervalEnd()){
+                        itMatchesSomething = true;
+                    }
+                    if (!itMatchesSomething) {
+                        continue;
+                    }
                 }
-            }
-
-            // numberOfEpisodesIntervalEnd (Number of episodes up to a total inclusive)
-            if (seriesFilter.getNumberOfEpisodesIntervalStart() == null && seriesFilter.getNumberOfEpisodesIntervalEnd() != null) {
-                if (sr.getTotalEpisode() <= seriesFilter.getNumberOfEpisodesIntervalEnd()){
-                    if (!filteredSeriesList.contains(sr)) {filteredSeriesList.add(sr);}
+                // TotalEpisodesIntervalEnd (Number of episodes up to a total inclusive)
+                if (seriesFilter.getTotalEpisodesIntervalStart() == null && seriesFilter.getTotalEpisodesIntervalEnd() != null) {
+                    itMatchesSomething = false;
+                    if (sr.getTotalEpisode() <= seriesFilter.getTotalEpisodesIntervalEnd()){
+                        itMatchesSomething = true;
+                    }
+                    if (!itMatchesSomething) {
+                        continue;
+                    }
                 }
+
+                // NumberOfSeasonIntervalStartEnd (Number of seasons in a range)
+                if (seriesFilter.getTotalSeasonIntervalStart() != null && seriesFilter.getTotalSeasonIntervalEnd() != null) {
+                    itMatchesSomething = false;
+                    if (sr.getTotalSeason() >= seriesFilter.getTotalSeasonIntervalStart() && sr.getTotalSeason() <= seriesFilter.getTotalSeasonIntervalEnd()){
+                        itMatchesSomething = true;
+                    }
+                    if (!itMatchesSomething) {
+                        continue;
+                    }
+                }
+                // NumberOfSeasonIntervalEnd (Number of seasons up to a total inclusive)
+                if (seriesFilter.getTotalSeasonIntervalStart() == null && seriesFilter.getTotalSeasonIntervalEnd() != null) {
+                    itMatchesSomething = false;
+                    if (sr.getTotalSeason() <= seriesFilter.getTotalSeasonIntervalEnd()){
+                        itMatchesSomething = true;
+                    }
+                    if (!itMatchesSomething) {
+                        continue;
+                    }
+                }
+
+                // AverageDurationEpisodeIntervalStartEnd (Series AverageDurationOfEpisodes in a range)
+                if (seriesFilter.getAverageDurationEpisodeIntervalStart() != null && seriesFilter.getAverageDurationEpisodeIntervalEnd() != null) {
+                    itMatchesSomething = false;
+                    if (sr.getAverageDurationEpisode() >= seriesFilter.getAverageDurationEpisodeIntervalStart() && sr.getAverageDurationEpisode() <= seriesFilter.getAverageDurationEpisodeIntervalEnd()){
+                        itMatchesSomething = true;
+                    }
+                    if (!itMatchesSomething) {
+                        continue;
+                    }
+                }
+                // AverageDurationEpisodeIntervalEnd (Series AverageDurationOfEpisodes up to a total inclusive)
+                if (seriesFilter.getAverageDurationEpisodeIntervalStart() == null && seriesFilter.getAverageDurationEpisodeIntervalEnd() != null) {
+                    itMatchesSomething = false;
+                    if (sr.getAverageDurationEpisode() <= seriesFilter.getAverageDurationEpisodeIntervalEnd()){
+                        itMatchesSomething = true;
+                    }
+                    if (!itMatchesSomething) {
+                        continue;
+                    }
+                }
+
+                if (!filteredSeriesList.contains(sr)) {filteredSeriesList.add(sr);}
             }
         }
 
         return filteredSeriesList;
     }
 
-    // Search for Season
-    public List<Episode> searchForMediaSeriesSeason(Series series, Integer SeasonNumber) {
-        List<Episode> filteredSeriesSeasonsList = new ArrayList<>();
+    // Search for Seasons
+    public ArrayList<Integer> searchForMediaSeriesSeason(Series series, Integer SeasonNumberNumberOfEpisodesStart, Integer SeasonNumberNumberOfEpisodesEnd) {
+        ArrayList<Integer> filteredSeriesSeasonsIndexList = new ArrayList<>();
 
         for (Series sr :  mongoRepository.getSeries().stream().toList())
         {
-            /* Filter Season */
+            /* Filter Seasons */
             for (Map.Entry<Integer, List<Episode>> SeEntry : sr.getSeasons().entrySet()) {
-                if (SeEntry.getKey().equals(SeasonNumber)) {
-                    filteredSeriesSeasonsList.addAll(SeEntry.getValue());
-                }
+                if (SeEntry.getValue().size() >= SeasonNumberNumberOfEpisodesStart && SeEntry.getValue().size() <= SeasonNumberNumberOfEpisodesEnd) {}
+                filteredSeriesSeasonsIndexList.add(SeEntry.getKey());
             }
         }
 
-        return filteredSeriesSeasonsList;
+        return filteredSeriesSeasonsIndexList;
     }
 
     // Search for Episode
@@ -156,44 +231,77 @@ public class MediaSearchController {
         // Input a null into SeasonNumber if you don't want to filter by episodes by season
         List<Episode> filteredSeriesEpisodeList = new ArrayList<>();
         boolean dontFilterEpisodesBySeason = (SeasonNumber == null);
+        boolean itMatchesSomething;
 
         for (Series sr : mongoRepository.getSeries().stream().toList())
         {
-            // Filter Season
+            /* Filter Seasons */
             for (Map.Entry<Integer, List<Episode>> SeEntry : sr.getSeasons().entrySet()) {
                 if (SeEntry.getKey().equals(SeasonNumber) || dontFilterEpisodesBySeason) {
-                    filteredSeriesEpisodeList.addAll(SeEntry.getValue());
-                    // Filter Episode
+                    //filteredSeriesEpisodeList.addAll(SeEntry.getValue());
+                    /* Filter Episodes */
                     for (Episode ep : SeEntry.getValue()) {
                         // Filter by titleSearchTerm
-                        if (ep.getTitle().toLowerCase().contains(episodeFilter.getTitleSearchTerm())) {
-                            if (!filteredSeriesEpisodeList.contains(ep)) {filteredSeriesEpisodeList.add(ep);}
+                        if (episodeFilter.getTitleSearchTerm() != null)
+                        {
+                            itMatchesSomething = false;
+                            if (ep.getTitle().toLowerCase().contains(episodeFilter.getTitleSearchTerm().toLowerCase())) {
+                                itMatchesSomething = true;
+                            }
+                            if (!itMatchesSomething) {
+                                continue;
+                            }
                         }
 
                         // Filter by durationMinSearchTerm
-                        if (ep.getDurationMin() <= episodeFilter.getDurationMinSearchTerm()) {
-                            if (!filteredSeriesEpisodeList.contains(ep)) {filteredSeriesEpisodeList.add(ep);}
+                        if (episodeFilter.getDurationMinSearchTerm() != null)
+                        {
+                            itMatchesSomething = false;
+                            if (ep.getDurationMin() >= episodeFilter.getDurationMinSearchTerm()) {
+                                itMatchesSomething = true;
+                            }
+                            if (!itMatchesSomething) {
+                                continue;
+                            }
                         }
 
                         // Filter by durationMaxSearchTerm
-                        if (ep.getDurationMin() >= episodeFilter.getDurationMaxSearchTerm()) {
-                            if (!filteredSeriesEpisodeList.contains(ep)) {filteredSeriesEpisodeList.add(ep);}
+                        if (episodeFilter.getDurationMaxSearchTerm() != null)
+                        {
+                            itMatchesSomething = false;
+                            if (ep.getDurationMin() <= episodeFilter.getDurationMaxSearchTerm()) {
+                                itMatchesSomething = true;
+                            }
+                            if (!itMatchesSomething) {
+                                continue;
+                            }
                         }
 
                         // Filter by seasonSearchTerm
-                        if (SeEntry.getKey().equals(episodeFilter.getSeasonSearchTerm())) {
-                            if (!filteredSeriesEpisodeList.contains(ep)) {filteredSeriesEpisodeList.add(ep);}
-                        }
-
-                        // Filter by episodeSearchTerm
-                        if (ep.getTitle().toLowerCase().contains(episodeFilter.getTitleSearchTerm().toLowerCase())) {
-                            if (!filteredSeriesEpisodeList.contains(ep)) {filteredSeriesEpisodeList.add(ep);}
+                        if (episodeFilter.getSeasonSearchTerm() != null)
+                        {
+                            itMatchesSomething = false;
+                            if (SeEntry.getKey().equals(episodeFilter.getSeasonSearchTerm())) {
+                                itMatchesSomething = true;
+                            }
+                            if (!itMatchesSomething) {
+                                continue;
+                            }
                         }
 
                         // Filter by synopsisSearchTerm
-                        if (ep.getSynopsis().toLowerCase().contains(episodeFilter.getSynopsisSearchTerm().toLowerCase())) {
-                            if (!filteredSeriesEpisodeList.contains(ep)) {filteredSeriesEpisodeList.add(ep);}
+                        if (episodeFilter.getSynopsisSearchTerm() != null)
+                        {
+                            itMatchesSomething = false;
+                            if (ep.getSynopsis().toLowerCase().contains(episodeFilter.getSynopsisSearchTerm().toLowerCase())) {
+                                itMatchesSomething = true;
+                            }
+                            if (!itMatchesSomething) {
+                                continue;
+                            }
                         }
+
+                        filteredSeriesEpisodeList.add(ep);
                     }
                 }
             }
@@ -206,30 +314,40 @@ public class MediaSearchController {
     // Search Movie
     public ArrayList<Movie> searchForMovie(FilterMovie movieFilter) {
         ArrayList<Movie> filteredMovieList = new ArrayList<>();
+        boolean itMatchesSomething;
 
         for (Movie mv : mongoRepository.getMovie().stream().toList())
         {
             /* Filter Media */
-            filteredMovieList.addAll(this.searchForMedia(mv, movieFilter));
-
-            /* Filter Movie */
-            // DurationMinutesIntervalStartEnd
-            if (movieFilter.getDurationMinutesIntervalStart() != null && movieFilter.getDurationMinutesIntervalEnd() != null) {
-                if (mv.getDurationMinutes() >= movieFilter.getDurationMinutesIntervalStart() &&
+            if (mv.equals(this.filterMatchMedia(mv, movieFilter))) {
+                /* Filter Movie */
+                // DurationMinutesIntervalStartEnd
+                if (movieFilter.getDurationMinutesIntervalStart() != null && movieFilter.getDurationMinutesIntervalEnd() != null) {
+                    itMatchesSomething = false;
+                    if (mv.getDurationMinutes() >= movieFilter.getDurationMinutesIntervalStart() &&
                         mv.getDurationMinutes() <= movieFilter.getDurationMinutesIntervalEnd()) {
-                    filteredMovieList.add(mv);
+                        itMatchesSomething = true;
+                    }
+                    if (!itMatchesSomething) {
+                        continue;
+                    }
                 }
-            }
 
-            // DurationMinutesIntervalEnd
-            if (movieFilter.getDurationMinutesIntervalStart() == null && movieFilter.getDurationMinutesIntervalEnd() != null) {
-                if (mv.getDurationMinutes() <= movieFilter.getDurationMinutesIntervalEnd()) {
-                    filteredMovieList.add(mv);
+                // DurationMinutesIntervalEnd
+                if (movieFilter.getDurationMinutesIntervalStart() == null && movieFilter.getDurationMinutesIntervalEnd() != null) {
+                    itMatchesSomething = false;
+                    if (mv.getDurationMinutes() <= movieFilter.getDurationMinutesIntervalEnd()) {
+                        itMatchesSomething = true;
+                    }
+                    if (!itMatchesSomething) {
+                        continue;
+                    }
                 }
+
+                filteredMovieList.add(mv);
             }
         }
 
         return filteredMovieList;
     }
-
 }

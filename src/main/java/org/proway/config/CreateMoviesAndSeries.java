@@ -13,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+
 public class CreateMoviesAndSeries {
     private static MongoRepository mongoRepository;
     private static final String MOVIE_API_URL = "https://yts.mx/api/v2/list_movies.json?limit=50";
@@ -85,7 +86,7 @@ public class CreateMoviesAndSeries {
                 String releaseDate = seriesJson.getString("premiered");
 
                 Series series = new Series(name, synopsis, casting, genre, imdb, releaseDate);
-                series.setAverageDurationEpisode((int) seriesJson.getDouble("averageRuntime"));
+                //series.setAverageDurationEpisode((int) seriesJson.getDouble("averageRuntime"));
                 seriesList.add(series);
             }
         } catch (Exception e) {
