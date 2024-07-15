@@ -9,7 +9,7 @@ import org.proway.util.annotations.Doc;
 import java.util.ArrayList;
 
 public class User implements MediaList, HistoryList {
-    private String nome;
+    private String name;
     private String password;
     private String email;
     // plan payment
@@ -18,25 +18,35 @@ public class User implements MediaList, HistoryList {
     private ArrayList<Media> myList;
     private ArrayList<Media> history;
     private boolean adm;
+    private static ArrayList<User> userBasicInfo = new ArrayList<>();
 
-    public User(String nome, String password, String email, String plan, boolean active, boolean adm) {
-        this.nome = nome;
+    public User() {}
+
+    public User(String name, String password, String email, boolean adm) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.adm = adm;
+        userBasicInfo.add(this);
+    }
+
+    public User(String name, String password, String email, String plan, boolean active, ArrayList<Midia> myList, ArrayList<Midia> history, boolean adm) {
+        this.name = name;
         this.password = password;
         this.email = email;
         this.plan = plan;
         this.active = active;
-        this.myList = new ArrayList<>();
-        this.history = new ArrayList<>();
+        this.myList = myList;
+        this.history = history;
         this.adm = adm;
     }
 
-
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -94,6 +104,23 @@ public class User implements MediaList, HistoryList {
     public void setAdm(boolean adm) {
         this.adm = adm;
     }
+
+    public ArrayList<User> getUserBasicInfo() {
+        return userBasicInfo;
+    }
+
+    public void setUserBasicInfo(ArrayList<User> userBasicInfo) {
+        this.userBasicInfo = userBasicInfo;
+    }
+
+    public static User getUserByEmail(String email) {
+        User user = null;
+        for(User u : userBasicInfo) {
+            if (u.getEmail().equals(email)) {
+                user = u;
+            }
+        }
+        return user;
 
     @Override
     public String toString() {
@@ -169,5 +196,6 @@ public class User implements MediaList, HistoryList {
             history.forEach(System.out::println);
         }
         return history;
+
     }
 }
