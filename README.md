@@ -8,7 +8,7 @@ Este projeto é um desafio de criação de um sistema que simula um streaming de
 
 - Java puro
 - Docker*
-- MongoDB*
+- MongoDB
 
 - *Obrigatório para rodar o projeto
 
