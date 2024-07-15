@@ -7,8 +7,10 @@ Este projeto é um desafio de criação de um sistema que simula um streaming de
 ### 🛠 Tecnologias utilizadas:
 
 - Java puro
-- Docker
-- MongoDB
+- Docker*
+- MongoDB*
+
+- *Obrigatório para rodar o projeto
 
 ##
 
