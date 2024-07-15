@@ -50,7 +50,7 @@ public class CreateMoviesAndSeries {
                 String genre = movieJson.getJSONArray("genres").getString(0);
                 double imdb = movieJson.getDouble("rating");
 
-                Movie movie = new Movie(name, synopsis, casting, imdb, "01-01-2000", genre);
+                Movie movie = new Movie(name, synopsis, casting, imdb, "2000-01-01", genre);
                 movie.setDurationMinutes(movieJson.getInt("runtime"));
                 movies.add(movie);
             }

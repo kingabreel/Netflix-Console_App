@@ -1,8 +1,6 @@
 package org.proway.view;
 
 import org.proway.controller.MediaSearchController;
-import org.proway.model.media.Genre;
-import org.proway.model.search.FilterMedia;
 import org.proway.model.search.FilterMovie;
 import org.proway.model.search.Series.FilterSeries;
 import org.proway.repository.MongoRepository;
@@ -12,7 +10,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -78,7 +75,6 @@ public class SearchView {
         int maxDuration = scanner.nextInt();
 
         if (movie) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
             FilterMovie fm = new FilterMovie();
             if (name.length() > 3) fm.setMediaNamesToSearch(new ArrayList<>(Collections.singletonList(name)));
@@ -89,7 +85,7 @@ public class SearchView {
             } else if (imdbEnd > 0 && imdbEnd <= 10) fm.setImdbScoreInterval(imdbEnd);
 
             try {
-                fm.setReleaseDateInterval(LocalDate.parse(dateStart, formatter), LocalDate.parse(dateEnd, formatter));
+                fm.setReleaseDateInterval(dateStart, dateEnd);
             } catch (DateTimeParseException e){}
             fm.setDurationMinutesInterval(minDuration, maxDuration);
 
@@ -97,7 +93,6 @@ public class SearchView {
             fm.setGenresToSearch(new ArrayList<>(Collections.singletonList(genre)));
             mediaSearchController.searchForMovie(fm).forEach(System.out::println);
         } else {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             FilterSeries fs = new FilterSeries();
 
             fs.setMediaNamesToSearch(new ArrayList<>(Collections.singletonList(name)));
@@ -105,10 +100,9 @@ public class SearchView {
             fs.setActorsToSearch(new ArrayList<>(Collections.singletonList(actor)));
             fs.getGenresToSearch().add(genre);
             fs.setImdbScoreInterval(imdbStart, imdbEnd);
-            fs.setAverageDurationEpisodeIntervalStart(minDuration);
-            fs.setAverageDurationEpisodeIntervalEnd(maxDuration);
+            fs.setAverageDurationEpisodeInterval(minDuration, maxDuration);
             try {
-                fs.setReleaseDateInterval(LocalDate.parse(dateStart, formatter), LocalDate.parse(dateEnd, formatter));
+                fs.setAverageDurationEpisodeInterval(minDuration, maxDuration);
             } catch (DateTimeParseException e) {}
 
             System.out.println("Min episodes: ");
@@ -117,8 +111,7 @@ public class SearchView {
             System.out.println("Max episodes: ");
             int maxEp = scanner.nextInt();
 
-            fs.setNumberOfEpisodesIntervalStart(minEp);
-            fs.setNumberOfEpisodesIntervalEnd(maxEp);
+            fs.setNumberOfEpisodesInterval(maxEp, minEp);
 
             System.out.println("Min seasons: ");
             int minSeasons = scanner.nextInt();
@@ -126,8 +119,7 @@ public class SearchView {
             System.out.println("Max seasons: ");
             int maxSeasons = scanner.nextInt();
 
-            fs.setTotalSeasonIntervalStart(minSeasons);
-            fs.setTotalSeasonIntervalEnd(maxSeasons);
+            fs.setNumberOfSeasonInterval(minSeasons, maxSeasons);
 
             mediaSearchController.searchForMediaSeries(fs).forEach(System.out::println);
         }

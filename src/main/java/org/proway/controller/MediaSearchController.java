@@ -73,7 +73,7 @@ public class MediaSearchController {
         // genresToSearch
         if (mediaFilter.getGenresToSearch() != null) {
             itMatchesSomething = false;
-            if (mediaFilter.getGenresToSearch().contains(md.getMediaGenre()))
+            if (mediaFilter.getGenresToSearch().contains(md.getGenre()))
                 itMatchesSomething = true;
             if (!itMatchesSomething) {
                 return null;
@@ -143,7 +143,7 @@ public class MediaSearchController {
                 // TotalEpisodesIntervalStartEnd (Number of episodes in a range)
                 if (seriesFilter.getTotalEpisodesIntervalStart() != null && seriesFilter.getTotalEpisodesIntervalEnd() != null) {
                     itMatchesSomething = false;
-                    if (sr.getTotalEpisode() >= seriesFilter.getTotalEpisodesIntervalStart() && sr.getTotalEpisodes() <= seriesFilter.getTotalEpisodesIntervalEnd()){
+                    if (sr.getTotalEpisode() >= seriesFilter.getTotalEpisodesIntervalStart() && sr.getTotalEpisode() <= seriesFilter.getTotalEpisodesIntervalEnd()){
                         itMatchesSomething = true;
                     }
                     if (!itMatchesSomething) {

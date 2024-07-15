@@ -8,7 +8,9 @@ import java.util.InputMismatchException;
 public class Main {
     public static void main(String[] args) {
         System.out.println("\t Starting application...");
-        //CreateMoviesAndSeries.fillDb();
+
+        // Remove the comment to fill the local database
+        // CreateMoviesAndSeries.fillDb();
         try {
             new MainPageView();
         } catch (InputMismatchException e) {

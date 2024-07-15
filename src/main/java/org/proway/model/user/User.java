@@ -22,15 +22,15 @@ public class User implements MediaList, HistoryList {
 
     public User() {}
 
-    public User(String name, String password, String email, String plan, boolean active, boolean adm) {
+    public User(String name, String password, String email, String plan) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.plan = plan;
-        this.active = active;
+        this.active = true;
         this.myList = new ArrayList<>();
         this.history = new ArrayList<>();
-        this.adm = adm;
+        this.adm = false;
         userBasicInfo.add(this);
     }
 
@@ -107,13 +107,10 @@ public class User implements MediaList, HistoryList {
     }
 
     public static User getUserByEmail(String email) {
-        User user = null;
-        for(User u : userBasicInfo) {
-            if (u.getEmail().equals(email)) {
-                user = u;
-            }
-        }
-        return user;
+        return userBasicInfo.stream()
+                .filter(u -> u.getEmail().equals(email))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override

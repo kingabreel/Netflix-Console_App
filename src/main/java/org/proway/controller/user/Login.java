@@ -1,6 +1,7 @@
 package org.proway.controller.user;
 
 import org.proway.model.user.User;
+import org.proway.repository.MongoRepository;
 
 import java.util.Objects;
 import java.util.Scanner;
@@ -10,15 +11,16 @@ public class Login {
     private String email;
     private String password;
     private boolean isAdm;
+    private MongoRepository mongoRepository;
 
     Scanner scanner = new Scanner(System.in);
 
     public Login(){
-        makeLogin();
+        mongoRepository = new MongoRepository();
     }
 
     public Login(User user) {
-
+        mongoRepository = new MongoRepository();
     }
 
     public Login(String name, String email, String password, boolean isAdm) {
@@ -26,6 +28,7 @@ public class Login {
         this.email = email;
         this.password = password;
         this.isAdm = isAdm;
+        mongoRepository = new MongoRepository();
     }
 
     public String getName() {
@@ -60,22 +63,25 @@ public class Login {
         isAdm = true;
     }
 
-    public void makeLogin() {
+    public User makeLogin() {
         try {
             System.out.println("========================================");
             System.out.println("Login");
             System.out.println("========================================");
             System.out.println("Enter your email:");
             String email = scanner.nextLine();
-            User user = getUser(email);
             System.out.println("Enter your password:");
             String password = scanner.nextLine();
-            if (user == null || !Objects.equals(password, user.getPassword())) throw new Error();
+
+            User user = mongoRepository.login(email, password);
+            if (user == null) throw new Error();
             makeSets(user);
+            return user;
         } catch (Error e) {
             System.out.println("Invalid email or password");
             makeLogin();
         }
+        return null;
     }
 
     private void makeSets(User user) {

@@ -1,11 +1,9 @@
 package org.proway.model.search.Series;
 
-import org.proway.model.media.Genre;
 import org.proway.model.search.FilterMedia;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class FilterSeries extends FilterMedia {
     /*

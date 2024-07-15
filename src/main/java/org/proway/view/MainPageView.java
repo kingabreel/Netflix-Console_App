@@ -1,5 +1,7 @@
 package org.proway.view;
 
+import org.proway.controller.user.Login;
+import org.proway.controller.user.Signing;
 import org.proway.model.media.Media;
 import org.proway.model.user.User;
 import org.proway.repository.MongoRepository;
@@ -12,12 +14,10 @@ import static org.proway.util.Utils.validateLoop;
 public class MainPageView {
     private Scanner scanner;
     private final String logo;
-    private MongoRepository mongoRepository;
 
     public MainPageView(){
         this.scanner = new Scanner(System.in);
         this.logo = "\uD83C\uDDF3\u200C\uD83C\uDDEA\u200C\uD83C\uDDF9\u200C\uD83C\uDDEB\u200C\uD83C\uDDF1\u200C\uD83C\uDDEE\u200C\uD83C\uDDFD\u200C";
-        mongoRepository = new MongoRepository();
         startAccount();
     }
 
@@ -45,15 +45,9 @@ public class MainPageView {
     }
 
     private void login(){
-        System.out.println("====Login====");
-        System.out.print("Email: ");
-        String email = scanner.nextLine();
-
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
-
         System.out.println();
-        User user = mongoRepository.login(email, password);
+        Login login = new Login();
+        User user = login.makeLogin();
         if (user != null) {
             DashboardView dv = new DashboardView(scanner, user);
             dv.dashboardMenu();
@@ -62,19 +56,8 @@ public class MainPageView {
     }
 
     private void createAccount(){
-        System.out.println("====New account====");
-        System.out.print("Username: ");
-        String username = scanner.nextLine();
-
-        System.out.print("Email: ");
-        String email = scanner.nextLine();
-
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
-
-        User user = new User(username, password, email, "comum", true, false);
-        mongoRepository.addUser(user);
-
+        Signing signing = new Signing();
+        signing.createAccount();
         login();
     }
 

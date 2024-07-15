@@ -45,7 +45,7 @@ public class Series extends Media {
             }
         }
 
-        this.averageDurationEpisode = this.totalSeriesDuration / this.totalEpisodes;
+        this.averageDurationEpisode = this.totalSeriesDuration / this.totalEpisode;
     }
 
     public void getSeason(Integer index){

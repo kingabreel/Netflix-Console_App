@@ -166,8 +166,8 @@ public class MongoRepository {
     public void removeMovie(String movie){
         Document q = new Document("name", movie);
 
-        if (database.getCollection("Series").find(q).iterator().hasNext()) {
-            database.getCollection("Series").deleteOne(q);
+        if (database.getCollection("Movies").find(q).iterator().hasNext()) {
+            database.getCollection("Movies").deleteOne(q);
             System.out.println("Deleted");
         } else {
             System.out.println("Not found");

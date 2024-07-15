@@ -1,6 +1,7 @@
 package org.proway.controller.user;
 
 import org.proway.model.user.User;
+import org.proway.repository.MongoRepository;
 
 import java.util.Scanner;
 
@@ -10,10 +11,11 @@ public class Signing {
     private String password;
     private boolean isAdm;
 
+    private MongoRepository mongoRepository;
     Scanner scanner = new Scanner(System.in);
 
     public Signing(){
-        createAccount();
+        mongoRepository = new MongoRepository();
     }
 
     public Signing(String name, String email, String password) {
@@ -71,9 +73,11 @@ public class Signing {
             setName(name);
             setEmail(email);
             setPassword(password);
-            if (checkIfIsAdm(email)) setAdm();
-            new User(getName(), getPassword(), getEmail(), getAdm());
-            new Login();
+
+            User user = new User(name, password, email, "common");
+            if (checkIfIsAdm(email)) user.setAdm(true);
+
+            mongoRepository.addUser(user);
         } catch (Error e) {
             System.out.println("Email already exists");
         }

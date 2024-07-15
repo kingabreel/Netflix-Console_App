@@ -75,13 +75,15 @@ public class DashboardView {
             case 1 -> {
                 catalogView.showMedia();
 
-                System.out.println("Please choose an movie id to watch, type 0 to get more movies or type -1 to exit");
-                int midiaChoice = scanner.nextInt();
+                int midiaChoice = -5;
 
                 while (midiaChoice != -1) {
-                    if (midiaChoice > 0 && midiaChoice < catalogView.getMedia().size())
+                    System.out.println("Please choose an movie id to watch, type 0 to get more movies or type -1 to exit");
+                    midiaChoice = scanner.nextInt();
+                    if (midiaChoice > 0 && midiaChoice < catalogView.getMedia().size()) {
                         catalogView.watch(catalogView.getMedia().get(midiaChoice - 1));
-                    else if (midiaChoice == 0) {
+                        midiaChoice = -1;
+                    } else if (midiaChoice == 0) {
                         catalogView.nextMediaList();
                         midiaChoice = scanner.nextInt();
                     }

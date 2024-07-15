@@ -1,10 +1,8 @@
 package org.proway.model.search;
 
-import org.proway.model.media.Genre;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class FilterMovie extends FilterMedia {
     /*

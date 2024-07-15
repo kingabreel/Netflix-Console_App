@@ -153,6 +153,8 @@ public class AdminController {
     }
 
     public void removeSerie(){
+        scanner.nextLine();
+
         System.out.println("Name: ");
         String name = scanner.nextLine();
 
@@ -160,6 +162,8 @@ public class AdminController {
     }
 
     public void removeMovie(){
+        scanner.nextLine();
+
         System.out.println("Name: ");
         String name = scanner.nextLine();
 

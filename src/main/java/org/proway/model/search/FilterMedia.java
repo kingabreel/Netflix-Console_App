@@ -1,6 +1,5 @@
 package org.proway.model.search;
 
-import org.proway.model.media.Genre;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public abstract class FilterMedia {
     protected String genreSearchTerm;
 
     public FilterMedia(ArrayList<String> mediaNamesToSearch, String synopsisSearchTerm, ArrayList<String> actorsToSearch, ArrayList<String> genresToSearch, double imdbScoreIntervalStart, double imdbScoreIntervalEnd, LocalDate releaseDateIntervalStart, LocalDate releaseDateIntervalEnd) {
-        this.emptyAllFilters();
+        this.emptyAllFiltersMedia();
         this.mediaNamesToSearch = mediaNamesToSearch;
         this.synopsisSearchTerm = synopsisSearchTerm;
         this.actorsToSearch = actorsToSearch;
