@@ -10,7 +10,7 @@ Este projeto é um desafio de criação de um sistema que simula um streaming de
 - Docker*
 - MongoDB
 
-- *Obrigatório para executar o projeto
+- *Obrigatório para executar o projeto (rodar os scripts createDb: .bat para Windows e .sh para linux)
 
 ##
 
