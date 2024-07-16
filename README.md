@@ -10,7 +10,7 @@ Este projeto é um desafio de criação de um sistema que simula um streaming de
 - Docker*
 - MongoDB
 
-- *Obrigatório para executar o projeto (rodar os scripts createDb: .bat para Windows e .sh para linux)
+- *Obrigatório para executar o projeto (rodar os scripts createDb: .bat para Windows ou .sh para linux)
 
 ##
 
@@ -24,6 +24,7 @@ Este projeto é um desafio de criação de um sistema que simula um streaming de
 ### 💻 Resultado:
 
 
-![ezgif com-gif-maker](https://github.com/caiqueb05/Desafio-T-Academy-RPG/assets/81648936/51fc2d76-291a-4ca0-b6a4-154af297c70e)
+![Netflix_Projeto-ezgif com-gif-maker](https://github.com/user-attachments/assets/f0c03fee-b243-4ecd-8597-ca07ea0a6bb1)
+
 
 ##
